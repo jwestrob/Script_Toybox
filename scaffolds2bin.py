@@ -27,7 +27,7 @@ if args.fbd is not None:
 if args.sbd is not None:
     sbindir = str(args.sbd)
 if args.c is not None:
-    contigs = str(args.c)
+    contig_file = str(args.c)
 if args.cd is not None:
     contig_dir = str(args.cd)
 if args.o is not None:
@@ -73,7 +73,7 @@ def main():
         binfile_list = []
         #Get a list of binfiles (as pandas dfs) with corresponding filename
         for filename in os.listdir(sbindir):
-            if filename.split('.')[-1] == 'txt' or filename.split('.')[-1] == 'tsv':
+            if filename.split('_')[-1] == 'scaffolds2bin.txt':
                 binfile_list.append([pd.read_csv(sbindir + '/' + filename, sep='\t', names=["Contig", "Bin"]), filename])
             else:
                 print("Found some nonsense. Please evaluate: ", filename)
@@ -83,12 +83,8 @@ def main():
             binfile_name = binfile[1]
 
             #Parse the right contigs file
-            for filename in os.listdir(contig_dir):
-                if filename.split('-')[0] == binfile_name.split('-')[0]:
-                    contigs = SeqIO.parse(contig_dir + '/' + filename, 'fasta')
-            #The entire concept of a generator is stupid. Why would you want a list you only use once? Why??? Why????????
-            contigs = list(contigs)
-            print("Werkin on : ", binfile_name  )
+            contigs = list(SeqIO.parse(contig_file, 'fasta'))
+            print("Werkin on : ", binfile_name)
             unique_bins = binfile_df.Bin.unique()
             for index, bin in enumerate(unique_bins):
                 #Get a reduced dataframe with only the rows corresponding to the bin in question
