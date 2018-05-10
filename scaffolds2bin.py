@@ -24,6 +24,8 @@ args = parser.parse_args()
 #Parse arguments to strings
 if args.fbd is not None:
     fbindir = str(args.fbd)
+else:
+
 if args.sbd is not None:
     sbindir = str(args.sbd)
 if args.c is not None:
@@ -79,7 +81,7 @@ def main():
                 print("Found some nonsense. Please evaluate: ", filename)
 
         for binfile in binfile_list:
-            bireductionnfile_df = binfile[0]
+            binfile_df = binfile[0]
             binfile_name = binfile[1]
 
             #Parse the right contigs file
