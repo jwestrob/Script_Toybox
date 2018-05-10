@@ -24,8 +24,6 @@ args = parser.parse_args()
 #Parse arguments to strings
 if args.fbd is not None:
     fbindir = str(args.fbd)
-else:
-
 if args.sbd is not None:
     sbindir = str(args.sbd)
 if args.c is not None:
