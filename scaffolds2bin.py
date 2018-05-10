@@ -41,7 +41,7 @@ def main():
         #Declare empty list for SeqRecord objects
 
         binfile_list = []
-        for filename in os.listdir(bindir):
+        for filename in os.listdir(fbindir):
             #Check filename endings to make sure everything is a fasta format-compliant
             #Maybe I'll allow for .mfa files sometime soon; probably not
             if filename.split('.')[-1] == 'fa' or filename.split('.')[-1] == 'fasta':
@@ -79,7 +79,7 @@ def main():
                 print("Found some nonsense. Please evaluate: ", filename)
 
         for binfile in binfile_list:
-            binfile_df = binfile[0]
+            bireductionnfile_df = binfile[0]
             binfile_name = binfile[1]
 
             #Parse the right contigs file
