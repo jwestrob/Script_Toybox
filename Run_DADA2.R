@@ -35,14 +35,14 @@ silva_train <- args$TRAIN
 silva_species <- args$SPECIES
 
 if(length(args$taxa) == 0){
-  taxa = FALSE
+  tax_table = FALSE
 }else{
-  taxa = TRUE
+  tax_table = TRUE
 }
 if(length(args$otu) == 0){
-  otu = FALSE
+  otu_table = FALSE
 }else{
-  otu=TRUE
+  otu_table = TRUE
 }
 
 ########################################
