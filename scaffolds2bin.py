@@ -46,8 +46,8 @@ def main():
             #Maybe I'll allow for .mfa files sometime soon; probably not
             if filename.split('.')[-1] == 'fa' or filename.split('.')[-1] == 'fasta':
                 binfile_list.append(SeqIO.parse(bindir + filename, 'fasta'))
-            else:
-                print("Your binfile directory has something in it that isn't a FASTA. Please investigate (this will not impede file conversion)")
+            #else:
+                #print("Your binfile directory has something in it that isn't a FASTA. Please investigate (this will not impede file conversion)")
 
         #Now let's make a separate list for the record objects.
         contig_list = []
@@ -75,8 +75,8 @@ def main():
         for filename in os.listdir(sbindir):
             if filename.split('_')[-1] == 'scaffolds2bin.txt':
                 binfile_list.append([pd.read_csv(sbindir + '/' + filename, sep='\t', names=["Contig", "Bin"]), filename])
-            else:
-                print("Found some nonsense. Please evaluate: ", filename)
+            #else:
+                #print("Found some nonsense. Please evaluate: ", filename)
 
         for binfile in binfile_list:
             binfile_df = binfile[0]
