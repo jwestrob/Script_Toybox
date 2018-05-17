@@ -20,8 +20,8 @@ if args.a:
 			os.system('anvi-gen-contigs-database -f ' + file.split('.')[0] + '-fixed.fa -o ' + file.split('.')[0] + ".db -n 'contigs database'")
 			os.system('anvi-run-hmms -c ' + file.split('.')[0] + '.db --num-threads 4')
 			os.system('anvi-run-ncbi-cogs -c ' + file.split('.')[0] + '.db --num-threads 4')
-			os.system('rm ' + file)
-			os.system('mv ' + file.split('.')[0] + '-fixed.fa ' + file)
+			#os.system('rm ' + file)
+			#os.system('mv ' + file.split('.')[0] + '-fixed.fa ' + file)
 		else:
 			continue
 else:
@@ -30,7 +30,7 @@ else:
 		os.system('anvi-gen-contigs-database -f ' + file.split('.')[0] + '-fixed.fa -o ' + file.split('.')[0] + ".db -n 'contigs database'")
 		os.system('anvi-run-hmms -c ' + file.split('.')[0] + '.db --num-threads 4')
 		os.system('anvi-run-ncbi-cogs -c ' + file.split('.')[0] + '.db --num-threads 4')
-		os.system('rm ' + file)
-		os.system('mv ' + file.split('.')[0] + '-fixed.fa ' + file)
+		#os.system('rm ' + file)
+		#os.system('mv ' + file.split('.')[0] + '-fixed.fa ' + file)
 
 print('boogie')

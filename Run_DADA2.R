@@ -12,6 +12,8 @@ parser$add_argument("-st", "--summarytable", type="character", nargs=1,
     help="Name for your summary table (.tsv will be appended).")
 parser$add_argument("-p", "--pdfout", type="character", nargs=1,
     help="PDF outfile name for plots.")
+parser$add_argument("-ps", "--phyloseq", type="character", nargs=1,
+    help="Name of file to save phyloseq object to. include .rds extenison.")
 parser$add_argument("-f", "--fastaprefix", type="character", nargs=1,
     help="Name for fasta output files (used as prefix for aligned and unaligned FASTAs). REQUIRED")
 parser$add_argument("-RT", "--TRAIN", type="character", nargs=1,
@@ -19,9 +21,9 @@ parser$add_argument("-RT", "--TRAIN", type="character", nargs=1,
 parser$add_argument("-RS", "--SPECIES", type="character", nargs=1,
     help="Path to SILVA species-level taxonomy data. REQUIRED")
 parser$add_argument("-t", "--taxa", type="character", default=NULL,
-    help="Optional: Print original taxa table (ASV sequence format).")
+    help="Optional: Print original taxa table (ASV sequence format). Include .tsv extension.")
 parser$add_argument("-o", "--otu", type="character", default=NULL,
-    help="OPTIONAL: Print original OTU/ASV table (ASV sequence format).")
+    help="OPTIONAL: Print original OTU/ASV table (ASV sequence format). Include .tsv extension.")
 
 
 #load arguments as variables (in array "args")
@@ -33,16 +35,28 @@ summarytable <- args$summarytable
 pdfout <- args$pdfout
 silva_train <- args$TRAIN
 silva_species <- args$SPECIES
+phylo_file <- args$phyloseq
 
 if(length(args$taxa) == 0){
-  tax_table = FALSE
+  tax = FALSE
 }else{
-  tax_table = TRUE
+  tax = TRUE
 }
 if(length(args$otu) == 0){
-  otu_table = FALSE
+  otu = FALSE
 }else{
-  otu_table = TRUE
+  otu = TRUE
+}
+
+if(tax){
+  tax_table = args$taxa
+}else{
+  tax_table = NULL
+}
+if(otu){
+  otu_table = args$otu
+}else{
+  otu_table = NULL
 }
 
 ########################################
@@ -107,26 +121,71 @@ ps <- phyloseq(otu_table(seqtab.nochim, taxa_are_rows=FALSE),
 
 print(plot_richness(ps, measures=c("Shannon", "Simpson")) + theme_bw() + ggtitle("Alpha diversity; Shannon and Simpson"))
 
-ord.PCA.bray <- ordinate(ps, method="NMDS", distance="manhattan")
+#ord.PCA.bray <- ordinate(ps, method="NMDS", distance="manhattan")
 
-print(plot_ordination(ps, ord.PCA.bray, title="Bray PCA") + theme_bw() + ggtitle("NMDS - Manhattan Distance"))
+#print(plot_ordination(ps, ord.PCA.bray, title="Bray PCA") + theme_bw() + ggtitle("NMDS - Manhattan Distance"))
 
 top20 <- names(sort(taxa_sums(ps), decreasing=TRUE))[1:20]
 top80 <- names(sort(taxa_sums(ps), decreasing=TRUE))[1:80]
+
 ps.alltaxa <- transform_sample_counts(ps, function(OTU) OTU/sum(OTU))
+
+#Plot non-normalized top 20 Genera
 ps.top20 <- prune_taxa(top20, ps.alltaxa)
+print(plot_bar(ps.top20, fill="Genus") + theme_bw() + ggtitle("Non-normalized composition of top 20 genera") + theme(legend.key.size = unit(2, "mm"), axis.text.x = element_text(angle = 90, hjust = 1)))
+
+#Plot non-normalized top 20 Families
+print(plot_bar(ps.top20, fill="Family") + theme_bw() + ggtitle("Non-normalized composition of top 20 families") + theme(legend.key.size = unit(2, "mm"), axis.text.x = element_text(angle = 90, hjust = 1)))
+
+#Normalize top 20 and plot
+ps.top20 <- transform_sample_counts(ps.top20, function(OTU) OTU/sum(OTU))
+plot_bar(ps.top20, fill="Genus") + ggtitle("Normalized composition of top 20 genera") +
+    guides(fill=guide_legend(nrow=40,byrow=TRUE)) + theme_bw() +
+    theme(legend.key.size = unit(2, "mm"), axis.text=element_text(size=6), axis.title=element_text(size=14,face="bold"), axis.text.x = element_text(angle = 90, hjust = 1))
+plot_bar(ps.top20, fill="Family") + ggtitle("Normalized composition of top 20 genera") +
+    guides(fill=guide_legend(nrow=40,byrow=TRUE)) + theme_bw() +
+    theme(legend.key.size = unit(2, "mm"), axis.text=element_text(size=6), axis.title=element_text(size=14,face="bold"), axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+#Plot non-normalized top 80 Genera
 ps.top80 <- prune_taxa(top80, ps.alltaxa)
-print(plot_bar(ps.top20, fill="Genus") + theme_bw() + ggtitle("Composition of top 20 genera") + theme(legend.key.size = unit(2, "mm"), axis.text.x = element_text(angle = 90, hjust = 1)))
-print(plot_bar(ps.top80, fill="Genus") + theme_bw() + ggtitle("Composition of top 80 genera") + theme(legend.key.size = unit(2, "mm"), axis.text.x = element_text(angle = 90, hjust = 1)) + guides(fill=guide_legend(nrow=40, byrow=TRUE)))
-print(plot_bar(ps.top20, fill="Family") + theme_bw() + ggtitle("Composition of top 20 families") + theme(legend.key.size = unit(2, "mm"), axis.text.x = element_text(angle = 90, hjust = 1)))
-print(plot_bar(ps.top80, fill="Family") + theme_bw() + ggtitle("Composition of top 80 families") + theme(legend.key.size = unit(2, "mm"), axis.text.x = element_text(angle = 90, hjust = 1)) + guides(fill=guide_legend(nrow=40, byrow=TRUE)))
-print(plot_bar(ps.Species, fill="Species") + theme_bw() + ggtitle("All species") + theme(legend.key.size = unit(2, "mm"), axis.text.x = element_text(angle = 90, hjust = 1)) + guides(fill=guide_legend(nrow=40, byrow=TRUE)))
+print(plot_bar(ps.top80, fill="Genus") + theme_bw() + ggtitle("Non-normalized composition of top 80 genera") +
+    theme(legend.key.size = unit(2, "mm"), axis.text.x = element_text(angle = 90, hjust = 1)) + guides(fill=guide_legend(nrow=40, byrow=TRUE)))
+print(plot_bar(ps.top80, fill="Family") + theme_bw() + ggtitle("Non-normalized composition of top 80 families") +
+    theme(legend.key.size = unit(2, "mm"), axis.text.x = element_text(angle = 90, hjust = 1)) + guides(fill=guide_legend(nrow=40, byrow=TRUE)))
 
-#Convert tax_table to matrix
-tax_mat = as(tax_table(ps), 'matrix')
+#Normalize top 80 and plot
+ps.top80 <- transform_sample_counts(ps.top80, function(OTU) OTU/sum(OTU))
 
-#Same with OTU table
-otu_mat = as(otu_table(ps), 'matrix')
+plot_bar(ps.top80, fill="Genus") + ggtitle("Normalized composition of top 80 genera") +
+    guides(fill=guide_legend(nrow=40,byrow=TRUE)) + theme_bw() +
+    theme(legend.key.size = unit(2, "mm"), axis.text=element_text(size=6), axis.title=element_text(size=14,face="bold"), axis.text.x = element_text(angle = 90, hjust = 1))
+plot_bar(ps.top80, fill="Family") + ggtitle("Normalized composition of top 80 genera") +
+    guides(fill=guide_legend(nrow=40,byrow=TRUE)) + theme_bw() +
+    theme(legend.key.size = unit(2, "mm"), axis.text=element_text(size=6), axis.title=element_text(size=14,face="bold"), axis.text.x = element_text(angle = 90, hjust = 1))
+
+Species <- names(sort(taxa_sums(ps), decreasing=TRUE))
+ps.Species <- transform_sample_counts(ps, function(OTU) OTU/sum(OTU))
+
+print(plot_bar(ps.Species, fill="Species") + theme_bw() + ggtitle("All species (normalized)") +
+    theme(legend.key.size = unit(2, "mm"), axis.text.x = element_text(angle = 90, hjust = 1)) + guides(fill=guide_legend(nrow=40, byrow=TRUE)))
+
+if(tax){
+  #Convert tax_table to matrix
+  tax_mat = as(tax_table(ps), 'matrix')
+
+  #Write that nonsense down
+  write(tax_mat, file=tax_table, sep='\t')
+}
+if(otu){
+  #Same with OTU table
+  otu_mat = as(otu_table(ps), 'matrix')
+
+  #Write that nonsense down again
+  write(tax_mat, file=otu_table, sep='\t')
+}
+
+saveRDS(ps, phylo_file)
 
 h <- hash()
 for(rowname in row.names(tax_mat)){
