@@ -95,16 +95,16 @@ def main():
                     'Downstream feature protein product', 'Downstream feature protein ID', 'Downstream feature AA sequence'])
     for filename in os.listdir('.'):
         if filename.split('.')[-1] == 'gb':
-            print "Analyzing ", filename.split('.')[0]
+            print("Analyzing ", filename.split('.')[0])
             recs = [rec for rec in SeqIO.parse(filename, "genbank")]
 
             #Grab coordinates and IDs from input file
             c_df = pd.read_csv(coords, sep='\t')
 
             # print the number of sequence records that were extracted
-            print "Records: ", len(recs)
+            print("Records: ", len(recs))
             if len(recs) != 1:
-                print "ugh whatever bye felicia"
+                print("ugh whatever bye felicia")
                 sys.exit()
 
             #Which sample are you working with?
@@ -117,7 +117,7 @@ def main():
             downstream_sense = 0
 
             for index, row in reduced_df.iterrows():
-                print index
+                print(index)
                 upstream, downstream = scanner(reduced_df['seq_start'][index], reduced_df['seq_end'][index], recs[0])
 
                 if not test_1(upstream.qualifiers, ('protein_id')):
@@ -146,7 +146,7 @@ def main():
                                 upstream.qualifiers[('locus_tag')], upstream.qualifiers[('product')], upstream_protein_id, upstream_translation,\
                                 downstream.location.strand, downstream.location.start, downstream.location.end,\
                                 downstream.qualifiers[('locus_tag')], downstream.qualifiers[('product')], downstream_protein_id, downstream_translation])
-                print "Hit number", index , "has been profiled."
+                print("Hit number" + str(index) + "has been profiled.")
 
 
     #Flatten the resulting lists so you don't have to deal with brackets for the rest of your life.

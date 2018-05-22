@@ -73,7 +73,7 @@ def main():
                     appender(row, allele_id, all_alleles)
     writer(all_alleles)
     id_writer(all_alleles)
-    print "Complete!"
+    print("Complete!")
 
 if __name__ == "__main__":
     main()

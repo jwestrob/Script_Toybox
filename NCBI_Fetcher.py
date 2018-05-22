@@ -13,9 +13,9 @@ infile = str(args.infile)
 
 def import_data():
     with open(infile, 'r') as csvfile:
-    	id_reader = csv.reader(csvfile, delimiter=",")
-    	comp_ids = list(id_reader) #Reads in as list of lists
-    	untreated_ids = [val for sublist in comp_ids for val in sublist] #Flatten that bad boy
+        id_reader = csv.reader(csvfile, delimiter=",")
+        comp_ids = list(id_reader) #Reads in as list of lists
+        untreated_ids = [val for sublist in comp_ids for val in sublist] #Flatten that bad boy
         ids = [GB.lstrip(' ') for GB in untreated_ids] #Remove leading whitespace, if any
     return ids
 
@@ -33,7 +33,7 @@ def main():
     ids = import_data()
     print(ids)
     for GB in ids:
-        print GB
+        print(GB)
         fetch(GB)
     print("boogie")
 
