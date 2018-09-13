@@ -6,7 +6,6 @@ import argparse
 parser = argparse.ArgumentParser(description='Scan a given set of genomes (in ~/concat) for a protein of interest using an HMM.')
 
 
-
 parser.add_argument('-hmm', metavar='hmm file', help='PATH to HMMER3-compatible .hmm file. (pls kindly include extension)')
 parser.add_argument('-fd', metavar='fasta directory', help='PATH to directory with protein FASTA files')
 parser.add_argument('-c', metavar='concat fastafile', help='PATH to concatenated protein FASTA')
@@ -27,6 +26,7 @@ hmmfile = str(args.hmm)
 fastadir = str(args.fd)
 concat = str(args.c)
 fastaout = str(args.fo)
+
 if args.ids is not None:
     idfile = str(args.ids)
 else:
@@ -46,10 +46,10 @@ def run_hmmsearch(hmmfile, cwd):
     print('------------------------------------------------------------')
     print("Beginning HMMsearch...")
     print('hmmsearch -o ' + cwd + '/' + hmmfile.split('/')[-1].split('.hmm')[0] + \
-            '_hmmsearch.out  --cpu ' + str(threads) + ' ' + hmmfile + \
+            '_hmmsearch.out --notextw --cpu ' + str(threads) + ' ' + hmmfile + \
             ' ' + concat)
     os.system('hmmsearch -o ' + cwd + '/' + hmmfile.split('/')[-1].split('.hmm')[0] + \
-            '_hmmsearch.out  --cpu ' + str(threads) + ' ' + hmmfile + \
+            '_hmmsearch.out  --notextw --cpu ' + str(threads) + ' ' + hmmfile + \
             ' ' + concat)
     print('------------------------------------------------------------')
     return hmmfile.split('/')[-1].split('.hmm')[0] + '_hmmsearch.out'
@@ -71,12 +71,30 @@ def write_hits(hits):
     return
 
 def pull_out_seqs(hits):
+    #This is the primary computational bottleneck. See if you can adapt around it
+    #Whoops looks like you're putting ALL YOUR PROTEINS INTO MEMORY -
+    #Not feasible past 2.0GB concat.faa
+    print("Pullin out seqs...")
     in_recs = list(SeqIO.parse(concat, 'fasta'))
     out_recs = []
     for id in hits:
         for rec in in_recs:
             if id in rec.id or id in rec.description:
                 out_recs.append(rec)
+    print('------------------------------------------------------------')
+    return out_recs
+
+def pull_out_seqs_ALT(hits):
+    print("Pullin out seqs...")
+    out_recs = []
+    #print(hits)
+    for id in hits:
+        recs = list(SeqIO.parse(id.split('|')[1].split('.peg')[0] + '.PATRIC.faa', 'fasta'))
+        for rec in recs:
+            if rec.id == id:
+                out_recs.append(rec)
+                break
+    print('------------------------------------------------------------')
     return out_recs
 
 def align_seqs():
@@ -109,7 +127,7 @@ def main():
     hits = flatten(hits)
 
     #Now let's get the proteins that correspond to the hits.
-    hit_recs = pull_out_seqs(hits)
+    hit_recs = pull_out_seqs_ALT(hits)
 
     if len(hit_recs) == 0:
         print("No hits detected. Examine outfile to check if anything went wrong.")
