@@ -2,13 +2,14 @@ import os, sys, csv
 import pandas as pd
 from Bio import SeqIO, SearchIO, AlignIO
 import argparse
+from multiprocessing import Pool
 
-parser = argparse.ArgumentParser(description='Scan a given set of genomes (in ~/concat) for a protein of interest using an HMM.')
+parser = argparse.ArgumentParser(description='Scan a given protein FASTA file for a protein of interest using an HMM; \
+            return FASTA format hits and a table of hit frequencies.')
 
 
 parser.add_argument('-hmm', metavar='hmm file', help='PATH to HMMER3-compatible .hmm file. (pls kindly include extension)')
-parser.add_argument('-fd', metavar='fasta directory', help='PATH to directory with protein FASTA files')
-parser.add_argument('-c', metavar='concat fastafile', help='PATH to concatenated protein FASTA')
+parser.add_argument('-p', metavar='protein fastafile', help='PATH to protein FASTA to search')
 parser.add_argument('-fo', metavar='fasta output', help='Name of FASTA output file with HMM hits')
 parser.add_argument('-ids', metavar='Contig hits ID file name', default=None, \
                     help='Output contig IDs of HMM hits to file at specified PATH')
@@ -17,15 +18,21 @@ parser.add_argument('-align', metavar='Output alignment of retrieved sequences',
 parser.add_argument('-macc', action='store_true', default=False, \
                     help='Use this flag to use increased accuracy when aligning with MAFFT.')
 parser.add_argument('-ht', metavar='hits table', help='Name of hits table to write.')
+parser.add_argument('-PAT',  help='PATRIC format data', \
+                    action='store_true', default=False)
+parser.add_argument('-ggez', help='ggKbase format data',\
+                    action='store_true', default=False)
 parser.add_argument('-threads', metavar='# of threads', default=1, \
                     help='Threads to use for HMMsearch/MAFFT.')
 
 args = parser.parse_args()
 
 hmmfile = str(args.hmm)
-fastadir = str(args.fd)
-concat = str(args.c)
+protfile = str(args.p)
 fastaout = str(args.fo)
+
+PATRIC = args.PAT
+gg = args.ggez
 
 if args.ids is not None:
     idfile = str(args.ids)
@@ -47,10 +54,10 @@ def run_hmmsearch(hmmfile, cwd):
     print("Beginning HMMsearch...")
     print('hmmsearch -o ' + cwd + '/' + hmmfile.split('/')[-1].split('.hmm')[0] + \
             '_hmmsearch.out --notextw --cpu ' + str(threads) + ' ' + hmmfile + \
-            ' ' + concat)
+            ' ' + protfile)
     os.system('hmmsearch -o ' + cwd + '/' + hmmfile.split('/')[-1].split('.hmm')[0] + \
             '_hmmsearch.out  --notextw --cpu ' + str(threads) + ' ' + hmmfile + \
-            ' ' + concat)
+            ' ' + protfile)
     print('------------------------------------------------------------')
     return hmmfile.split('/')[-1].split('.hmm')[0] + '_hmmsearch.out'
 
@@ -71,11 +78,8 @@ def write_hits(hits):
     return
 
 def pull_out_seqs(hits):
-    #This is the primary computational bottleneck. See if you can adapt around it
-    #Whoops looks like you're putting ALL YOUR PROTEINS INTO MEMORY -
-    #Not feasible past 2.0GB concat.faa
     print("Pullin out seqs...")
-    in_recs = list(SeqIO.parse(concat, 'fasta'))
+    in_recs = list(SeqIO.parse(protfile, 'fasta'))
     out_recs = []
     for id in hits:
         for rec in in_recs:
@@ -84,16 +88,20 @@ def pull_out_seqs(hits):
     print('------------------------------------------------------------')
     return out_recs
 
+def finder(rec, hits):
+    for id in hits:
+        if id in rec.id or id in rec.description:
+            return rec
+    return None
+
 def pull_out_seqs_ALT(hits):
     print("Pullin out seqs...")
     out_recs = []
     #print(hits)
-    for id in hits:
-        recs = list(SeqIO.parse(id.split('|')[1].split('.peg')[0] + '.PATRIC.faa', 'fasta'))
-        for rec in recs:
-            if rec.id == id:
-                out_recs.append(rec)
-                break
+    #p = Pool(threads)
+    recs = list(SeqIO.parse(protfile, 'fasta'))
+    out_recs_wNone = list(map(lambda r: finder(r, hits), recs))
+    out_recs = [x for x in out_recs_wNone if x is not None]
     print('------------------------------------------------------------')
     return out_recs
 
@@ -139,27 +147,35 @@ def main():
     if align is not None:
         align_seqs()
 
-
-    hits_ids = list(map(lambda x: x.split('.peg')[0].split('|')[1], hits))
+    if PATRIC:
+        hits_ids = list(map(lambda x: x.split('.peg')[0].split('|')[1], hits))
+    elif gg:
+        hits_ids = hits
 
     hits_table = [[i] for i in hits_ids]
 
     for element in hits_table:
         element.append(0)
 
-    for filename in os.listdir(fastadir):
+    for filename in os.listdir('.'):
         if filename.endswith('.faa'):
             fasta_id = filename.split('.PATRIC.faa')[0]
             if fasta_id in hits_ids:
                 idx = hits_ids.index(fasta_id)
                 hits_table[idx][1] = hits_ids.count(fasta_id)
                 recs = list(SeqIO.parse(filename, 'fasta'))
-
-                if ']' in recs[0].description.split('   ')[2]:
-                    organism_name = recs[0].description.split('   ')[2].strip('[').strip(']')
-                elif ']' in recs[0].description.split('   ')[1]:
-                    organism_name = recs[0].description.split('   ')[1].strip('[').strip(']')
+                try:
+                    if ']' in recs[0].description.split('   ')[2]:
+                        organism_name = recs[0].description.split('   ')[2].strip('[').strip(']')
+                    elif ']' in recs[0].description.split('   ')[1]:
+                        organism_name = recs[0].description.split('   ')[1].strip('[').strip(']')
+                except:
+                    print('womp')
+                    print(filename)
+                    print(recs[0].description)
                 hits_table[idx].append(organism_name)
+
+
 
     headers = ['Fasta ID', '# of XoxF family HMM hits', 'Organism name']
     df = pd.DataFrame(hits_table, columns=headers)
