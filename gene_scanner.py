@@ -151,36 +151,41 @@ def main():
         hits_ids = list(map(lambda x: x.split('.peg')[0].split('|')[1], hits))
     elif gg:
         hits_ids = hits
+    else:
+        hits_ids = None
+        if idfile is not None:
+            print('You requested an ID file but didnt specify the input format. No ID or hits file will be generated.')
 
-    hits_table = [[i] for i in hits_ids]
+    if hits_ids is not None:
+        hits_table = [[i] for i in hits_ids]
 
-    for element in hits_table:
-        element.append(0)
+        for element in hits_table:
+            element.append(0)
 
-    for filename in os.listdir('.'):
-        if filename.endswith('.faa'):
-            fasta_id = filename.split('.PATRIC.faa')[0]
-            if fasta_id in hits_ids:
-                idx = hits_ids.index(fasta_id)
-                hits_table[idx][1] = hits_ids.count(fasta_id)
-                recs = list(SeqIO.parse(filename, 'fasta'))
-                try:
-                    if ']' in recs[0].description.split('   ')[2]:
-                        organism_name = recs[0].description.split('   ')[2].strip('[').strip(']')
-                    elif ']' in recs[0].description.split('   ')[1]:
-                        organism_name = recs[0].description.split('   ')[1].strip('[').strip(']')
-                except:
-                    print('womp')
-                    print(filename)
-                    print(recs[0].description)
-                hits_table[idx].append(organism_name)
+        for filename in os.listdir('.'):
+            if filename.endswith('.faa'):
+                fasta_id = filename.split('.PATRIC.faa')[0]
+                if fasta_id in hits_ids:
+                    idx = hits_ids.index(fasta_id)
+                    hits_table[idx][1] = hits_ids.count(fasta_id)
+                    recs = list(SeqIO.parse(filename, 'fasta'))
+                    try:
+                        if ']' in recs[0].description.split('   ')[2]:
+                            organism_name = recs[0].description.split('   ')[2].strip('[').strip(']')
+                        elif ']' in recs[0].description.split('   ')[1]:
+                            organism_name = recs[0].description.split('   ')[1].strip('[').strip(']')
+                    except:
+                        print('womp')
+                        print(filename)
+                        print(recs[0].description)
+                    hits_table[idx].append(organism_name)
 
 
 
-    headers = ['Fasta ID', '# of XoxF family HMM hits', 'Organism name']
-    df = pd.DataFrame(hits_table, columns=headers)
-    print("Writing hits table to: " + hits_table_out)
-    df.to_csv(hits_table_out, sep='\t', index=False)
+        headers = ['Fasta ID', '# of XoxF family HMM hits', 'Organism name']
+        df = pd.DataFrame(hits_table, columns=headers)
+        print("Writing hits table to: " + hits_table_out)
+        df.to_csv(hits_table_out, sep='\t', index=False)
     print("Complete! Check to make sure things are OK.")
 
 
