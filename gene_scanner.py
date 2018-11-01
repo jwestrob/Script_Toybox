@@ -2,10 +2,12 @@ import os, sys, csv
 import pandas as pd
 from Bio import SeqIO, SearchIO, AlignIO
 import argparse
-from multiprocessing import Pool
+from pathos.multiprocessing import ProcessingPool as Pool
 
 parser = argparse.ArgumentParser(description='Scan a given protein FASTA file for a protein of interest using an HMM; \
-            return FASTA format hits and a table of hit frequencies.')
+            return FASTA format hits and a table of hit frequencies.' + '\n' + \
+            "If you want to align your fasta output, include the '-align' flag." + '\n' + \
+            "If you want to align them using the more stringent MAFFT parameters, include -macc as well.")
 
 
 parser.add_argument('-hmm', metavar='hmm file', help='PATH to HMMER3-compatible .hmm file. (pls kindly include extension)')
@@ -20,7 +22,7 @@ parser.add_argument('-macc', action='store_true', default=False, \
 parser.add_argument('-ht', metavar='hits table', help='Name of hits table to write.')
 parser.add_argument('-PAT',  help='PATRIC format data', \
                     action='store_true', default=False)
-parser.add_argument('-ggez', help='ggKbase format data',\
+parser.add_argument('-gg', help='ggKbase format data', \
                     action='store_true', default=False)
 parser.add_argument('-threads', metavar='# of threads', default=1, \
                     help='Threads to use for HMMsearch/MAFFT.')
@@ -32,7 +34,7 @@ protfile = str(args.p)
 fastaout = str(args.fo)
 
 PATRIC = args.PAT
-gg = args.ggez
+ggkbase = args.gg
 
 if args.ids is not None:
     idfile = str(args.ids)
@@ -100,7 +102,8 @@ def pull_out_seqs_ALT(hits):
     #print(hits)
     #p = Pool(threads)
     recs = list(SeqIO.parse(protfile, 'fasta'))
-    out_recs_wNone = list(map(lambda r: finder(r, hits), recs))
+    p = Pool(threads)
+    out_recs_wNone = list(p.map(lambda r: finder(r, hits), recs))
     out_recs = [x for x in out_recs_wNone if x is not None]
     print('------------------------------------------------------------')
     return out_recs
@@ -149,43 +152,36 @@ def main():
 
     if PATRIC:
         hits_ids = list(map(lambda x: x.split('.peg')[0].split('|')[1], hits))
-    elif gg:
-        hits_ids = hits
+    elif ggkbase:
+        hits_ids = list(map(lambda x: x.split('_scaffold')[0] + '_' +\
+                            '_'.join(x.split('_scaffold_')[1].split('_')[2:]), hits))
     else:
-        hits_ids = None
-        if idfile is not None:
-            print('You requested an ID file but didnt specify the input format. No ID or hits file will be generated.')
+        hits_ids = hits
 
     if hits_ids is not None:
         hits_table = [[i] for i in hits_ids]
+    else:
+        print("No hits. Exiting...")
+        sys.exit(420)
 
-        for element in hits_table:
-            element.append(0)
-
-        for filename in os.listdir('.'):
-            if filename.endswith('.faa'):
-                fasta_id = filename.split('.PATRIC.faa')[0]
-                if fasta_id in hits_ids:
-                    idx = hits_ids.index(fasta_id)
-                    hits_table[idx][1] = hits_ids.count(fasta_id)
-                    recs = list(SeqIO.parse(filename, 'fasta'))
-                    try:
-                        if ']' in recs[0].description.split('   ')[2]:
-                            organism_name = recs[0].description.split('   ')[2].strip('[').strip(']')
-                        elif ']' in recs[0].description.split('   ')[1]:
-                            organism_name = recs[0].description.split('   ')[1].strip('[').strip(']')
-                    except:
-                        print('womp')
-                        print(filename)
-                        print(recs[0].description)
-                    hits_table[idx].append(organism_name)
+    for element in hits_table:
+        element.append(0)
 
 
 
-        headers = ['Fasta ID', '# of XoxF family HMM hits', 'Organism name']
-        df = pd.DataFrame(hits_table, columns=headers)
-        print("Writing hits table to: " + hits_table_out)
-        df.to_csv(hits_table_out, sep='\t', index=False)
+    hits_ids = pd.Series(hits_ids)
+    hits_ids_counts = hits_ids.value_counts()
+
+
+
+    header = ['Organism_ID', 'num_hits']
+
+    df = pd.DataFrame(hits_table, columns=header)
+
+    df.num_hits = df.apply(lambda row: hits_ids_counts[row['Organism_ID']], axis=1)
+
+    print("Writing hits table to: " + hits_table_out)
+    df.to_csv(hits_table_out, sep='\t', index=False)
     print("Complete! Check to make sure things are OK.")
 
 
