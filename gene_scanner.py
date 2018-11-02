@@ -25,6 +25,8 @@ parser.add_argument('-PAT',  help='PATRIC format data', \
                     action='store_true', default=False)
 parser.add_argument('-gg', help='ggKbase format data', \
                     action='store_true', default=False)
+parser.add_argument('-luis', help='Luis and his special weird format header',\
+                    action='store_true', default=False)
 parser.add_argument('-threads', metavar='# of threads', default=1, \
                     help='Threads to use for HMMsearch/MAFFT.')
 
@@ -36,6 +38,7 @@ fastaout = str(args.fo)
 
 PATRIC = args.PAT
 ggkbase = args.gg
+luis  = args.luis
 
 if args.ids is not None:
     idfile = str(args.ids)
@@ -169,6 +172,8 @@ def main():
     elif ggkbase:
         hits_ids = list(map(lambda x: x.split('_scaffold')[0] + '_' +\
                             '_'.join(x.split('_scaffold_')[1].split('_')[2:]), hits))
+    elif luis:
+        hits_ids = list(map(lambda x: x.split('_bin="')[1].strip('"')[0], hits))
     else:
         hits_ids = hits
 
