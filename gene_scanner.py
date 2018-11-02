@@ -120,7 +120,7 @@ def pull_out_seqs(hits):
     out_recs_wshort = [x for x in out_recs_wNone if x is not None]
     lengths = [len(rec.seq) for rec in out_recs_wshort]
     max_len = np.mean(lengths)
-    out_recs = [x for x in out_recs_wshort if len(x.seq) >= 0.4*max_len]
+    out_recs = [x for x in out_recs_wshort if len(x.seq) >= 0.25*max_len]
     print('------------------------------------------------------------')
     return out_recs
 
