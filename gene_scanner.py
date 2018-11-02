@@ -153,10 +153,8 @@ def main():
     #Eliminate potential nested list bc i don't want to deal with it
     #hits = flatten(hits)
 
-    print(len(hits))
     #Now let's get the proteins that correspond to the hits.
     hit_recs = pull_out_seqs(hits)
-    print(len(hit_recs))
     if len(hit_recs) == 0:
         print("No hits detected. Examine outfile to check if anything went wrong.")
         sys.exit(420)
