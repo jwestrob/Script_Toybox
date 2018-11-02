@@ -72,7 +72,7 @@ def dale():
 
 def get_hits(infile):
     hits = []
-    with open(infile, 'rU') as handle:
+    with open(infile, 'r') as handle:
         for record in SearchIO.parse(handle, 'hmmer3-text'):
             hits.append(list(record))
 
@@ -173,7 +173,7 @@ def main():
         hits_ids = list(map(lambda x: x.split('_scaffold')[0] + '_' +\
                             '_'.join(x.split('_scaffold_')[1].split('_')[2:]), hits))
     elif luis:
-        hits_ids = list(map(lambda x: x.split('_bin="')[1].strip('"')[0], hits))
+        hits_ids = list(map(lambda x: x.split('_bin="')[1].strip('"')[0], hits1))
     else:
         hits_ids = hits
 
