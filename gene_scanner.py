@@ -173,7 +173,7 @@ def main():
         hits_ids = list(map(lambda x: x.split('_scaffold')[0] + '_' +\
                             '_'.join(x.split('_scaffold_')[1].split('_')[2:]), hits))
     elif luis:
-        hits_ids = list(map(lambda x: x.split('_bin="')[1].strip('"')[0], hits1))
+        hits_ids = list(map(lambda x: x.split('_bin="')[1].strip('"')[0], hits))
     else:
         hits_ids = hits
 
