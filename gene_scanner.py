@@ -2,6 +2,7 @@ import os, sys, csv
 import pandas as pd
 from Bio import SeqIO, SearchIO, AlignIO
 import argparse
+import numpy as np
 from pathos.multiprocessing import ProcessingPool as Pool
 
 parser = argparse.ArgumentParser(description='Scan a given protein FASTA file for a protein of interest using an HMM; \
@@ -63,12 +64,24 @@ def run_hmmsearch(hmmfile, cwd):
     print('------------------------------------------------------------')
     return hmmfile.split('/')[-1].split('.hmm')[0] + '_hmmsearch.out'
 
+def dale():
+    os.system('Rscript ~/scripts/dale.R')
+
 def get_hits(infile):
     hits = []
     with open(infile, 'rU') as handle:
         for record in SearchIO.parse(handle, 'hmmer3-text'):
-            hits.append(list(record.hit_keys))
-    return hits
+            hits.append(list(record))
+
+    hits = hits[0]
+
+    good_hits = []
+
+    for hit in hits:
+        if hit.evalue < 0.1:
+            good_hits.append(hit._id)
+
+    return good_hits
 
 def write_hits(hits):
     print("Writing HMM hit FASTA contig IDs to " + idfile)
@@ -79,32 +92,32 @@ def write_hits(hits):
     print('------------------------------------------------------------')
     return
 
+
+def finder(hit_id, hits):
+    try:
+        idx = hits.index(hit_id)
+        return idx
+    except:
+        return
+
 def pull_out_seqs(hits):
     print("Pullin out seqs...")
-    in_recs = list(SeqIO.parse(protfile, 'fasta'))
     out_recs = []
-    for id in hits:
-        for rec in in_recs:
-            if id in rec.id or id in rec.description:
-                out_recs.append(rec)
-    print('------------------------------------------------------------')
-    return out_recs
-
-def finder(rec, hits):
-    for id in hits:
-        if id in rec.id or id in rec.description:
-            return rec
-    return None
-
-def pull_out_seqs_ALT(hits):
-    print("Pullin out seqs...")
-    out_recs = []
-    #print(hits)
-    #p = Pool(threads)
     recs = list(SeqIO.parse(protfile, 'fasta'))
+    ids = [rec.id for rec in recs]
     p = Pool(threads)
-    out_recs_wNone = list(p.map(lambda r: finder(r, hits), recs))
-    out_recs = [x for x in out_recs_wNone if x is not None]
+    indices_list = list(p.map(lambda x: finder(x, hits), ids))
+    indices_list = [x for x in indices_list if x is not None]
+    out_recs_wNone = []
+
+    #Rewrite this someday to not use a for loop
+    for idx in indices_list:
+        out_recs_wNone.append(recs[idx])
+
+    out_recs_wshort = [x for x in out_recs_wNone if x is not None]
+    lengths = [len(rec.seq) for rec in out_recs_wshort]
+    max_len = np.mean(lengths)
+    out_recs = [x for x in out_recs_wshort if len(x.seq) >= 0.4*max_len]
     print('------------------------------------------------------------')
     return out_recs
 
@@ -135,11 +148,12 @@ def main():
         write_hits(hits)
 
     #Eliminate potential nested list bc i don't want to deal with it
-    hits = flatten(hits)
+    #hits = flatten(hits)
 
+    print(len(hits))
     #Now let's get the proteins that correspond to the hits.
-    hit_recs = pull_out_seqs_ALT(hits)
-
+    hit_recs = pull_out_seqs(hits)
+    print(len(hit_recs))
     if len(hit_recs) == 0:
         print("No hits detected. Examine outfile to check if anything went wrong.")
         sys.exit(420)
@@ -176,14 +190,14 @@ def main():
 
     header = ['Organism_ID', 'num_hits']
 
-    df = pd.DataFrame(hits_table, columns=header)
+    df = pd.DataFrame(hits_table, columns=header).drop_duplicates()
 
     df.num_hits = df.apply(lambda row: hits_ids_counts[row['Organism_ID']], axis=1)
 
     print("Writing hits table to: " + hits_table_out)
     df.to_csv(hits_table_out, sep='\t', index=False)
     print("Complete! Check to make sure things are OK.")
-
+    dale()
 
 if __name__ == '__main__':
     main()
