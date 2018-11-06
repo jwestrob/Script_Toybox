@@ -89,7 +89,7 @@ def get_hits(infile):
 def write_hits(hits):
     print("Writing HMM hit FASTA contig IDs to " + idfile)
     hits_series = pd.Series(hits)
-    hits.to_csv(csvfile, sep='\t')
+    hits_series.to_csv(csvfile, sep='\t')
     print('------------------------------------------------------------')
     return
 

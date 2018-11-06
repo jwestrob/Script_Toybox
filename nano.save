@@ -1,0 +1,1050 @@
+ 1023 cd ..
+ 1024 ls
+ 1025 ls 20cm/
+ 1026 ls 40cm/
+ 1027 ls 40cm/ -thora
+ 1028 ls 20cm/ -thora
+ 1029 sl
+ 1030 ls
+ 1031 history
+ 1032 fg
+ 1033 ls
+ 1034 cd 40cm/
+ 1035 ls
+ 1036 head 13_1_40CM_
+ 1037 head 13_1_40CM_1.proteins.faa
+ 1038 head 13_1_40CM_2.proteins.faa
+ 1039 head 13_1_40CM_3.proteins.faa
+ 1040 head 13_1_40CM_4.proteins.faa
+ 1041 ls
+ 1042 mkdir scaf2bin
+ 1043 mv *.tsv scaf2bin/
+ 1044 rm *.out
+ 1045 cd scaf2bin/
+ 1046 ls
+ 1047 head 13_1_40CM_1.scaffolds_to_bin.tsv
+ 1048 python
+ 1049 ls
+ 1050 rm *
+ 1051 cd ..
+ 1052 rm -rf scaf2bin/
+ 1053 ls
+ 1054 cd ..
+ 1055 ls
+ 1056 cd 20cm/
+ 1057 ls
+ 1058 cd Taxonomy/
+ 1059 ls
+ 1060 cd ..
+ 1061 l
+ 1062 ls
+ 1063 cd ..
+ 1064 ls
+ 1065 cd 40cm/
+ 1066 ls
+ 1067 mkdir Taxonomy
+ 1068 mv *.tsv Taxonomy/
+ 1069 ls
+ 1070 ls Taxonomy/
+ 1071 cd ..
+ 1072 ls
+ 1073 head 20cm/Taxonomy/13_1_20CM_1.contig-taxonomy.tsv
+ 1074 cd 20cm/Taxonomy/
+ 1075 ls
+ 1076 python
+ 1077 ls
+ 1078 cd ..
+ 1079 ls
+ 1080 for fastafile in *.faa; do grep "full" | wc -l; done
+ 1081 for fastafile in *.faa; do grep "full" $fastafile | wc -l; done
+ 1082 grep ">" 13_1_20CM_1.faa | head -n 5
+ 1083 grep ">" 13_1_20CM_1.proteins.faa | head -n 5
+ 1084 grep ">" 13_1_20CM_2.proteins.faa | head -n 5
+ 1085 ls
+ 1086 cd Documents/Berkeley/Xoxf/
+ 1087 ls
+ 1088 cd fastas/
+ 1089 ls
+ 1090 cd Archaea/
+ 1091 ls
+ 1092 grep ">" PATRIC_Archaea_XoxF_hits.faa | head -n 40
+ 1093 nano PATRIC_Archaea_XoxF_hits.faa
+ 1094 cd ../
+ 1095 cd ..
+ 1096 cd hmms/
+ 1097 ls
+ 1098 ls scanning_for_pqq/
+ 1099 ls scanning_for_pqq/proteins/
+ 1100 cd ..
+ 1101 ls
+ 1102 cd hmms/
+ 1103 ls
+ 1104 cd scanning_for_pqq/
+ 1105 ls
+ 1106 python ~/scripts/gene_scanner.py -h
+ 1107 ls ..
+ 1108 ls proteins/
+ 1109 python ~/scripts/gene_scanner.py -hmm ../PqqD_pfam.hmm -p proteins/PATRIC_Archaea_XoxF_hits.faa -fo pqqD_out.faa -ids pqqD_out.ids.csv 
+-threads 4
+ 1110 ls
+ 1111 grpe ">" pqqD_out.faa
+ 1112 grep ">" pqqD_out.faa
+ 1113 ls
+ 1114 cd ..
+ 1115 ls
+ 1116 cd ..
+ 1117 ls
+ 1118 find . -name "*.ipynb"
+ 1119 cd Downloads/
+ 1120 ls
+ 1121 scp MaxBin-2.2.5.tar.gz jwestrob@biotite.berkeley.edu:/home/jwestrob/bin
+ 1122 ls
+ 1123 tar -zxvf Tools.tar.gz
+ 1124 ls
+ 1125 mv Tools MyCC
+ 1126 sftp jwestrob@biotite.berkeley.edu
+ 1127 cd ~/scripts/
+ 1128 python gene_scanner.py -h
+ 1129 cd scripts/
+ 1130 git pull
+ 1131 ls
+ 1132 atom gene_scanner.py
+ 1133 git add .
+ 1134 git commit -m "making script better for luis"
+ 1135 git push -uf origin master
+ 1136 cd ../Documents/Berkeley/
+ 1137 ls
+ 1138 nano Allison_meeting.txt
+ 1139 cd NSF_Examples/
+ 1140 ls
+ 1141 evince Vince-BuffaloPersonal-statement2014.pdf
+ 1142 bg
+ 1143 cd ..
+ 1144 nano Allison_meeting.txt
+ 1145 biotite
+ 1146 cd Documents/Berkeley/
+ 1147 ls
+ 1148 mkdir GTDB
+ 1149 cd GTDB/
+ 1150 scp jwestrob@berkeley.edu:/home/jwestrob/GTDB/cpr_in_MSA_2157_of_2231.mfaa .
+ 1151 scp jwestrob@biotite.berkeley.edu:/home/jwestrob/GTDB/cpr_in_MSA_2157_of_2231.mfaa .
+ 1152 aliview cpr_in_MSA_2157_of_2231.mfaa
+ 1153 atom ~/scripts/gene_scanner.py
+ 1154 ls
+ 1155 cd ..
+ 1156 cd HanginWit
+ 1157 cd HanginWitLuis/
+ 1158 mv ~/Downloads/SCN18_26_2_15_R4_B_Saccharibacteria_TM7_47_213.proteins.faa .
+ 1159 ls
+ 1160 mkdir cdhit
+ 1161 mv *.clstr cdhit
+ 1162 head CPr
+ 1163 head CPR_Taxa.txt
+ 1164 rm CPR_Taxa.txt
+ 1165 mkdir fastas
+ 1166 mv *.faa fastas
+ 1167 python ~/scripts/gene_scanner.py -h
+ 1168 ls
+ 1169 mkdir hmms
+ 1170 cd hmms/
+ 1171 ls
+ 1172 cd ..
+ 1173 ls
+ 1174 python ~/scripts/gene_scanner.py
+ 1175 python ~/scripts/gene_scanner.py -h
+ 1176 ls fastas
+ 1177 ln -s ~/scripts/gene_scanner.py
+ 1178 python gene_scanner.py -hmm hmms/Pilin.hmm -p fastas/SCN18_26_2_15_R4_B_Saccharibacteria_TM7_47_213.proteins.faa -fo 
+Saccharibacteria_pilin_hits.mfaa -align -threads 4
+ 1179 python gene_scanner.py -hmm hmms/Pilin.hmm -p fastas/SCN18_26_2_15_R4_B_Saccharibacteria_TM7_47_213.proteins.faa -fo 
+Saccharibacteria_pilin_hits.faa -align Saccharibacteria_pilin_hits_ALN.mfaa -threads 4
+ 1180 python gene_scanner.py -hmm hmms/Pilin.hmm -p fastas/SCN18_26_2_15_R4_B_Saccharibacteria_TM7_47_213.proteins.faa -fo 
+Saccharibacteria_pilin_hits.faa
+ 1181 ls
+ 1182 pytho
+ 1183 python gene_scanner.py -hmm hmms/Pilin.hmm -p Divergent_pilin_RAPH.fa -fo Divergent_pilin_RAPH_pfam_hmm_hits.faa -align 
+Divergent_pilin_RAPH_pfam_hmm_hits_ALN.mfaa -threads 4
+ 1184 biotite
+ 1185 htop
+ 1186 biotite
+ 1187 vpn disconnect
+ 1188 htop
+ 1189 cd ~/Desktop/
+ 1190 ls
+ 1191 mv CMU_Transcript.pdf Berkeley_Transcript
+ 1192 mv Berkeley_Transcript Berkeley_Transcript.pdf
+ 1193 biotite
+ 1194 cd ~/Documents/
+ 1195 ls
+ 1196 find . -name "Embedder"
+ 1197 cd Jacob/Sim_Genomes/
+ 1198 ls
+ 1199 cd Embedder/
+ 1200 ls
+ 1201 evince UMAP_Embedding.png
+ 1202 xdg-open UMAP_Embedding.png
+ 1203 xdg-open t-SNE_Embedding.png
+ 1204 ls
+ 1205 cd ..
+ 1206 ls
+ 1207 find . -name "*.txt"
+ 1208 ls concat_blastn/
+ 1209 biotite
+ 1210 cd ~/Documents/
+ 1211 mkdir Rust
+ 1212 cd Rust/
+ 1213 git clone https://github.com/onecodex/needletail.git
+ 1214 cd needletail/
+ 1215 cargo test
+ 1216 sudo apt-get install cargo
+ 1217 sudo apt-get install rust
+ 1218 curl https://sh.rustup.rs -sSf | sh
+ 1219 ls
+ 1220 cargo test
+ 1221 sudo apt-get update
+ 1222 sudo apt-get upgrade
+ 1223 source $HOME/.cargo/env
+ 1224 cargo test
+ 1225 ls
+ 1226 ls src
+ 1227 cd ..
+ 1228 mkdir hello_world
+ 1229 cd hello_world/
+ 1230 >hello_world.rs
+ 1231 nano hello_world.rs
+ 1232 rust hello_world.rs
+ 1233 rustc hello_world.rs
+ 1234 ./hello_world
+ 1235 nano hello_world.rs
+ 1236 ln -s ~/Documents/Jacob/Sim_Genomes/Lactobacillus_casei.fasta .
+ 1237 >needletail_test.rs
+ 1238 nano needletail_test.rs
+ 1239 rustc needletail_test.rs
+ 1240 rustc --explain E0463
+ 1241 metabat2
+ 1242 maxbin2
+ 1243 maxbin
+ 1244 biotite
+ 1245 cd Documents/Berkeley/HanginWitL
+ 1246 cd Documents/Berkeley/HanginWitLuis/
+ 1247 ls
+ 1248 nano Saccharibacteria_pilin_hits.faa
+ 1249 samtools view -h
+ 1250 biotite
+ 1251 cd ~/Downloads/
+ 1252 sftp jwestrob@biotite.berkeley.edu
+ 1253 ls
+ 1254 cd ~/Documents/Berkeley/
+ 1255 ls
+ 1256 cd GTDB/
+ 1257 ls
+ 1258 aliview cpr_in_MSA_2157_of_2231.mfaa
+ 1259 sftp jwestrob@biotite.berkeley.edu
+ 1260 cd ..
+ 1261 ls Stat_Phylo/
+ 1262 cd
+ 1263 cd ..
+ 1264 ls
+ 1265 cd ~/Documents/Ber
+ 1266 cd ~/Documents/Berkeley/
+ 1267 mkdir HanginWitSohum
+ 1268 cd HanginWitSohum/
+ 1269 >forloop_test.sh
+ 1270 nano forloop_test.sh
+ 1271 >test.fa
+ 1272 >test2.fa
+ 1273 >test3.fa
+ 1274 nano forloop_test.sh
+ 1275 bash forloop_test.sh
+ 1276 nano forloop_test.sh
+ 1277 bash forloop_test.sh
+ 1278 ls ~/Documents/
+ 1279 ls ~/Documents/books/
+ 1280 ls ~/Documents/books/AMD/
+ 1281 cd ~/Documents/books/AMD/
+ 1282 ls
+ 1283 evince 9781482257304.pdf
+ 1284 evince 9781498762434.pdf
+ 1285 berkeley
+ 1286 biotite
+ 1287 sudo nano /etc/resolv.conf
+ 1288 berkeley
+ 1289 biotite
+ 1290 fg
+ 1291 cd ..
+ 1292 mkdir AMD_SA
+ 1293 cd AMD_SA/
+ 1294 ls
+ 1295 cd ..
+ 1296 ls
+ 1297 cd Berkeley/
+ 1298 find . -name "*.pdf"
+ 1299 cd Papers/Books/
+ 1300 ls
+ 1301 evince 2017_Book_AcidMineDrainageInSouthAfrica.pdf
+ 1302 htop
+ 1303 rustc --version
+ 1304 which rustc
+ 1305 sudo apt-get remove rustc
+ 1306 sudo apt-get upgrade rustc
+ 1307 sudo apt-get purge rustc
+ 1308 curl https://sh.rustup.rs -sSf | sh
+ 1309 source $HOME/.cargo/env
+ 1310 ls
+ 1311 cd Documents/Berkeley/
+ 1312 >meeting_with_basem_and_raph_oct_25.txt
+ 1313 nano meeting_with_basem_and_raph_oct_25.txt
+ 1314 find . -name "*.txt"
+ 1315 nano meeting_with_basem_and_raph_oct_25.txt
+ 1316 biotite
+ 1317 dale
+ 1318 biotite
+ 1319 biotie
+ 1320 biotite
+ 1321 ls
+ 1322 cd Documents/
+ 1323 ls
+ 1324 cd Jacob/
+ 1325 ls
+ 1326 cd Geobacter/
+ 1327 ls
+ 1328 ls Geobacter_Genes/
+ 1329 cd Geobacter_Genes/
+ 1330 ls
+ 1331 ls -thora
+ 1332 grep ">" GSU2726.fasta
+ 1333 grep ">" concat_without_omc_cluster.fa | wc -l
+ 1334 cd ..
+ 1335 ls
+ 1336 cd ..
+ 1337 cd Geobacter/Deltaproteobacteria_db/
+ 1338 ls
+ 1339 cd concat/
+ 1340 ls
+ 1341 mmseqs
+ 1342 ln -s ../../Geobacter_Genes/concat_without_omc_cluster.fa
+ 1343 ls
+ 1344 mmseqs easy-search -h
+ 1345 history
+ 1346 mmseqs easy-search concat_without_omc_cluster.fa mmseqs_deltaproteo_DB deltaproteo_omc_cluster_hits.faa tmp
+ 1347 ls
+ 1348 ls tmp/
+ 1349 ls tmp/6587644546327488236/
+ 1350 ls
+ 1351 grep ">" deltaproteo_omc_cluster_hits.faa | wc -l
+ 1352 rm deltaproteo_omc_cluster_hits.faa
+ 1353 cd Documents/Berkeley/Mineralogy/
+ 1354 ls
+ 1355 rm Book_WENK.pdf
+ 1356 unzip cambridge-core_minerals_30Oct2018.zip
+ 1357 ls
+ 1358 evince 02.0_pp_v_xiv_Contents.pdf
+ 1359 evince 07.3_pp_156_180_Optical_properties.pdf
+ 1360 bg
+ 1361 biotite
+ 1362 cd ../Angelo/
+ 1363 ls
+ 1364 cd Angelo_2014_NCBI/
+ 1365 ls
+ 1366 gunzip angelo2014.proteins.faa.gz
+ 1367 grep ">" angelo2014.proteins.faa | head -n 5
+ 1368 grep "13_1_20cm_2" angelo2014.proteins.faa
+ 1369 ls
+ 1370 sftp jwestrob@biotite.berkeley.edu
+ 1371 biotite
+ 1372 ls
+ 1373 scp angelo2014.contig-taxonomy.tsv jwestrob@biotite.berkeley.edu:/home/jwestrob/Angelo_NCBI_2014
+ 1374 biotite
+ 1375 cd ..
+ 1376 ls
+ 1377 cd ..
+ 1378 ls
+ 1379 cd Xoxf/
+ 1380 ls
+ 1381 cd fastas
+ 1382 ls
+ 1383 scp mdh_marine_xox_reference_sequences.faa jwestrob@biotite.berkeley.edu:/home/jwestrob/xoxf/
+ 1384 biotite
+ 1385 sudo nano /etc/resolv.conf
+ 1386 ls
+ 1387 biotite
+ 1388 atom ~/scripts/gene_scanner.py
+ 1389 dale
+ 1390 nano ~/scripts/dale.R
+ 1391 biotite
+ 1392 cd Documents/Berkeley/Angelo/
+ 1393 ls
+ 1394 cd Angelo_2014_NCBI/
+ 1395 ls
+ 1396 cp angelo2014.contigs.fa.gz angelo2014.contigs.1.fa.gz
+ 1397 gunzip angelo2014.contigs.1.fa.gz
+ 1398 python
+ 1399 ls
+ 1400 python ~/scripts/gene_scanner.py -h
+ 1401 python ~/scripts/gene_scanner.py -hmm ../../Xoxf/hmms/
+ 1402 python ~/scripts/gene_scanner.py -hmm ../../Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -threads 4 -gg -fo 
+angelo_2014_xoxfmdh_hits.faa -ids angelo_2014_xoxfmdh_ids.tsv -ht angelo_2014_xoxfmdh_hitstable.tsv
+ 1403 ls
+ 1404 python ~/scripts/gene_scanner.py -hmm ../../Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -threads 4 -gg -fo 
+angelo_2014_xoxfmdh_hits.faa -ids angelo_2014_xoxfmdh_ids.tsv -ht angelo_2014_xoxfmdh_hitstable.tsv
+ 1405 pip install --user pathos
+ 1406 python ~/scripts/gene_scanner.py -hmm ../../Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -threads 4 -gg -fo 
+angelo_2014_xoxfmdh_hits.faa -ids angelo_2014_xoxfmdh_ids.tsv -ht angelo_2014_xoxfmdh_hitstable.tsv
+ 1407 python
+ 1408 python ~/scripts/gene_scanner.py -hmm ../../Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -threads 4 -gg -fo 
+angelo_2014_xoxfmdh_hits.faa -ids angelo_2014_xoxfmdh_ids.tsv -ht angelo_2014_xoxfmdh_hitstable.tsv
+ 1409 head angelo_2014_xoxfmdh_hitstable.tsv
+ 1410 python
+ 1411 jupyter notebook
+ 1412 sudo nano /etc/resov.conf
+ 1413 sudo nano /etc/resolv.conf
+ 1414 biotite
+ 1415 ls
+ 1416 cd ..
+ 1417 ls
+ 1418 cd Angelo_2016
+ 1419 ls
+ 1420 grep ">" Sage1_L_113_16.proteins.1.faa | head -n 40
+ 1421 biotite
+ 1422 biotite -X
+ 1423 htop
+ 1424 cd Documents/Berkeley/Angelo/
+ 1425 ls
+ 1426 cd Angelo_2014_NCBI/
+ 1427 ls
+ 1428 head angelo_2014_xoxfmdh_ids.tsv
+ 1429 grep "AA115" angelo_2014_xoxfmdh_ids.tsv
+ 1430 grep "AA115" angelo_2014_xoxfmdh_hitstable.tsv
+ 1431 cd ..
+ 1432 ls
+ 1433 cd Angelo_2016
+ 1434 ls
+ 1435 cd ~/scripts/
+ 1436 git add .
+ 1437 git commit -m "Made gene_scanner.py work with protein files from ggkbase"
+ 1438 git push -uf origin master
+ 1439 cd ~/Documents/Berkeley/Angelo/Angelo_2016
+ 1440 ls
+ 1441 scp Sage1_L_113_16.proteins.faa.gz jwestrob@biotite.berkeley.edu:/home/jwestrob
+ 1442 sftp jwestrob@biotite.berkeley.edu
+ 1443 ls
+ 1444 gp Sage1_L_113_16.proteins.faa.gz Sage1_L_113_16.proteins.1.faa.gz
+ 1445 cp Sage1_L_113_16.proteins.faa.gz Sage1_L_113_16.proteins.1.faa.gz
+ 1446 gunzip Sage1_L_113_16.proteins.1.faa.gz
+ 1447 python ~/scripts/gene_scanner.py -h
+ 1448 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p Sage1_L_113_16.proteins.1.faa -fo 
+Sage1_L_113_16.XoxfMxaFhits.faa -ids Sage1_L_113_16.XoxfMxaF.ids.csv -ht Sage1_L_113_16.XoxfMxaF.hitstable.tsv -gg -threads 4
+ 1449 python
+ 1450 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p Sage1_L_113_16.proteins.1.faa -fo 
+Sage1_L_113_16.XoxfMxaFhits.faa -ids Sage1_L_113_16.XoxfMxaF.ids.csv -ht Sage1_L_113_16.XoxfMxaF.hitstable.tsv -gg -threads 4
+ 1451 ls
+ 1452 grep ">" Sage1_L_113_16.XoxfMxaFhits.faa | wc -l
+ 1453 grep ">" ../Angelo_2014_NCBI/angelo_2014_xoxfmdh_hits.faa | wc -l
+ 1454 ls
+ 1455 rm *.out
+ 1456 ls
+ 1457 head Sage1_L_113_16.XoxfMxaF.hitstable.tsv
+ 1458 wc -l Sage1_L_113_16.XoxfMxaF.hitstable.tsv
+ 1459 ls
+ 1460 python
+ 1461 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p Sage1_L_113_16.proteins.1.faa -fo 
+Sage1_L_113_16.XoxfMxaFhits.faa -ids Sage1_L_113_16.XoxfMxaF.ids.csv -ht Sage1_L_113_16.XoxfMxaF.hitstable.tsv -gg -threads 4
+ 1462 head Sage1_L_113_16.XoxfMxaF.hitstable.tsv
+ 1463 python
+ 1464 cd ../Angelo_2014
+ 1465 cd ../Angelo_2014_NCBI
+ 1466 ls
+ 1467 history | grep angelo_2014_xoxfmdh
+ 1468 history | grep gene_scanner
+ 1469 ls
+ 1470 python
+ 1471 ls
+ 1472 history | grep gene_scanner
+ 1473 ls
+ 1474 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+angelo_2014_xoxfmdh_hits.faa -ids angelo_2014_xoxfmdh_ids.csv -ht angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1475 head angelo_2014_xoxfmdh_hitstable.tsv
+ 1476 htop
+ 1477 sensors
+ 1478 htop
+ 1479 biotite
+ 1480 cd Documents/Berkeley/Angelo/Angelo_2016
+ 1481 ls
+ 1482 python
+ 1483 ls
+ 1484 mkdir contigs_gz
+ 1485 mv *.gz contigs_gz/
+ 1486 ls
+ 1487 mkdir contigs
+ 1488 mv Sage1_L_113_16.proteins.1.faa contigs
+ 1489 mkdir Scanning
+ 1490 mv Sage1_L_113_16.XoxfMxaF* Scanning/
+ 1491 ls
+ 1492 mv MDH_Xoxf_MxaF_hmmsearch.out Scanning/
+ 1493 cd Scanning/
+ 1494 ls
+ 1495 mkdir Sage1_L_113_16
+ 1496 mv * Sage1_L_113_16
+ 1497 ls
+ 1498 cd ..
+ 1499 ls
+ 1500 python
+ 1501 ls
+ 1502 ls Scanning/
+ 1503 cd ..
+ 1504 cd Angelo_2014_NCBI/
+ 1505 ls
+ 1506 cd xoxf_mdh_search/
+ 1507 ls
+ 1508 cd individual_bin_hits/
+ 1509 ls
+ 1510 ls -thora
+ 1511 cd ..
+ 1512 ls
+ 1513 tar -cxvf xoxf_2014_angelo_hits.tar.gz individual_bin_hits/
+ 1514 tar -zcvf xoxf_2014_angelo_hits.tar.gz individual_bin_hits/
+ 1515 ls
+ 1516 sftp jwestrob@biotite.berkeley.edu
+ 1517 ls
+ 1518 python
+ 1519 scp jwestrob@biotite.berkeley.edu:/home/jwestrob/Angelo_NCBI_2014/xoxf_2014_hmm_hits/clustering/Acidobacteria_gp6_AA42_xoxf_ALN.mfaa .
+ 1520 aliview Acidobacteria_gp6_AA42_xoxf_ALN.mfaa
+ 1521 jalview &
+ 1522 ls
+ 1523 atom Acidobacteria_gp6_AA42_xoxf_ALN.mfaa
+ 1524 ls
+ 1525 python
+ 1526 ls
+ 1527 cd ..
+ 1528 ls
+ 1529 history | grep "gene_scanner"
+ 1530 ls
+ 1531 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p xoxf_mdh_search/angelo2014.proteins.faa -fo 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa -ids xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv -ht 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1532 ls
+ 1533 ls xoxf_mdh_search/
+ 1534 rm xoxf_mdh_search/MDH_Xoxf_MxaF_hmmsearch.out
+ 1535 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p xoxf_mdh_search/angelo2014.proteins.faa -fo 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa -ids xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv -ht 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1536 ls
+ 1537 ls xoxf_mdh_search/
+ 1538 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa -ids xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv -ht 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1539 dale
+ 1540 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa -ids xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv -ht 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1541 ls
+ 1542 cd xoxf_mdh_search/
+ 1543 ls
+ 1544 python
+ 1545 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa -ids xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv -ht 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1546 cd ..
+ 1547 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa -ids xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv -ht 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1548 fg
+ 1549 grep ">" xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa | wc -l
+ 1550 grep ">" angelo2014.proteins.faa
+ 1551 grep ">" angelo2014.proteins.faa | wc -l
+ 1552 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa -ids xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv -ht 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1553 grep ">" xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa
+ 1554 grep ">" xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa | wc -l
+ 1555 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa -ids xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv -ht 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1556 expr 1615537 / 163731
+ 1557 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa -ids xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv -ht 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1558 ls
+ 1559 grep ">" angelo2014.proteins.faa | head -n 5
+ 1560 less xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv
+ 1561 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hits.faa -ids xoxf_mdh_search/angelo_2014_xoxfmdh_ids.csv -ht 
+xoxf_mdh_search/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1562 ls
+ 1563 cd xoxf_mdh_search/
+ 1564 ls
+ 1565 python
+ 1566 atom ~/scripts/gene_scanner.py
+ 1567 mkdir test_alt
+ 1568 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+test_alt/angelo_2014_xoxfmdh_hits.faa -ids test_alt/angelo_2014_xoxfmdh_ids.csv -ht test_alt/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1569 cd ..
+ 1570 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+test_alt/angelo_2014_xoxfmdh_hits.faa -ids test_alt/angelo_2014_xoxfmdh_ids.csv -ht test_alt/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1571 mkdir test_alt
+ 1572 rmdir xoxf_mdh_search/test_alt/
+ 1573 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+test_alt/angelo_2014_xoxfmdh_hits.faa -ids test_alt/angelo_2014_xoxfmdh_ids.csv -ht test_alt/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1574 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+test_alt/angelo_2014_xoxfmdh_hits.faa -ids test_alt/angelo_2014_xoxfmdh_ids.csv -ht test_alt/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 2
+ 1575 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+test_alt/angelo_2014_xoxfmdh_hits.faa -ids test_alt/angelo_2014_xoxfmdh_ids.csv -ht test_alt/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1576 ls
+ 1577 less test_alt/angelo_2014_xoxfmdh_hitstable.tsv
+ 1578 python
+ 1579 cd ..
+ 1580 ls
+ 1581 cd Angelo_2016
+ 1582 la
+ 1583 cd Scanning/
+ 1584 ls
+ 1585 cd Sage1_L_113_16/
+ 1586 ls
+ 1587 history
+ 1588 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p Sage1_L_113_16.proteins.1.faa -fo 
+Sage1_L_113_16.XoxfMxaFhits.faa -ids Sage1_L_113_16.XoxfMxaF.ids.csv -ht Sage1_L_113_16.XoxfMxaF.hitstable.tsv -gg -threads 4
+ 1589 ls
+ 1590 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p ../../contigs/Sage1_L_113_16.proteins.1.faa 
+-fo Sage1_L_113_16.XoxfMxaFhits.faa -ids Sage1_L_113_16.XoxfMxaF.ids.csv -ht Sage1_L_113_16.XoxfMxaF.hitstable.tsv -gg -threads 4
+ 1591 less Sage1_L_113_16.XoxfMxaF.hitstable.tsv
+ 1592 cd ../..
+ 1593 ls
+ 1594 ls contigs
+ 1595 ls contigs_gz/
+ 1596 cp contigs_gz/*.gz contigs
+ 1597 cd contigs
+ 1598 rm Sage1_L_113_16.proteins.faa.gz
+ 1599 gunzip *.gz
+ 1600 ls
+ 1601 bashish list
+ 1602 bashish elite
+ 1603 bashish list
+ 1604 bashish box
+ 1605 lol
+ 1606 bashish bluesteel
+ 1607 ls
+ 1608 cd ~/scripts/
+ 1609 git add .
+ 1610 git commit -m "fixin stuff wit luis; makin gene_scanner run fast af"
+ 1611 git push -uf origin master
+ 1612 history | grep gene_scanner
+ 1613 cd ~/Documents/Berkeley/Angelo/
+ 1614 ls
+ 1615 cd Angelo_2016/
+ 1616 ls
+ 1617 cd Scanning/
+ 1618 ls
+ 1619 cd Sage1_L_113_16/
+ 1620 ls
+ 1621 head Sage1_L_113_16.XoxfMxaF.hitstable.tsv
+ 1622 python
+ 1623 biotite
+ 1624 cd ~/scripts/
+ 1625 git add .
+ 1626 git commit -m "fixing stupid thing because stupid python devs dont like the letter U"
+ 1627 git push -uf origin master
+ 1628 biotite
+ 1629 htop
+ 1630 nano ~/scripts/dale.R
+ 1631 cd ~/Documents/
+ 1632 cd Berkeley/HanginWitLuis/
+ 1633 scp jwestrob@biotite.berkeley.edu:/home/luisva/CPR_pilin/fasta/giy-yig.pfam_hmmsearch.out .
+ 1634 atom giy-yig.pfam_hmmsearch.out
+ 1635 nano test
+ 1636 mafft test > test_aln.mfaa
+ 1637 aliview test_aln.mfaa
+ 1638 ls
+ 1639 biotite
+ 1640 htop
+ 1641 biotite
+ 1642 htop
+ 1643 cd Downloads/
+ 1644 ls
+ 1645 wget https://github.com/beast-dev/tracer/releases/download/v1.7.1/Tracer_v1.7.1.tgz
+ 1646 tar -zxvf Tracer_v1.7.1.tgz
+ 1647 cd Tracer_v1.7.1/
+ 1648 ls
+ 1649 cd bin/
+ 1650 ls
+ 1651 ./tracer
+ 1652 chmod +x tracer
+ 1653 tracer
+ 1654 ./tracer
+ 1655 man pvm-dev
+ 1656 ls
+ 1657 pwd
+ 1658 cd /usr/bin
+ 1659 sudo ln -s /home/jacob/Downloads/Tracer_v1.7.1/bin/tracer .
+ 1660 cd ~
+ 1661 tracer
+ 1662 cd Documents/Berkeley/Stat_Phylo/Lab_3
+ 1663 cd Documents/Berkeley/Stat_Phylo/
+ 1664 ls
+ 1665 cd Lab3
+ 1666 ls
+ 1667 atom MCMC_diagnosis.Rev
+ 1668 Rb
+ 1669 ls
+ 1670 rb MCMC_diagnosis.Rev
+ 1671 ls
+ 1672 pwd
+ 1673 tracer &
+ 1674 rb MCMC_diagnosis.Rev
+ 1675 tracer
+ 1676 cd ~
+ 1677 cd scripts/
+ 1678 git add .
+ 1679 git commit -m "making special format for luis"
+ 1680 git push -uf origin master
+ 1681 python gene_scanner.py -h
+ 1682 python
+ 1683 git add .
+ 1684 git commit -m "typo"
+ 1685 git push -uf origin master
+ 1686 git add .
+ 1687 git commit -m "easing length restriction"
+ 1688 git push -uf origin master
+ 1689 git add .
+ 1690 git push -uf origin master
+ 1691 git commit -m "no more printz"
+ 1692 git push -uf origin master
+ 1693 cd ~/Documents/Berkeley/
+ 1694 ls
+ 1695 cd Angelo/
+ 1696 ls
+ 1697 cd Angelo_2016/
+ 1698 ls
+ 1699 cd SC
+ 1700 cd Scanning/
+ 1701 ls
+ 1702 ls ../contigs
+ 1703 mkdir Mad1_100_16
+ 1704 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p ../contigs/Mad1_100_16.proteins.faa -fo 
+Mad1_100_16/xoxf_mdh_hits.faa -gg -threads 4 -ht Mad1_100_16/xoxf_mdh_hitstable.tsv
+ 1705 cd Mad1_100_16/
+ 1706 less xoxf_mdh_hitstable.tsv
+ 1707 sudo nano /etc/resolv.conf
+ 1708 sudo nano /etc/NetworkManager/NetworkManager.conf
+ 1709 sudo /etc/init.d/network-manager restart
+ 1710 sudo nano /etc/resolv.conf
+ 1711 sudo nano /etc/dhcp/dhclient.conf
+ 1712 sudo service network-manager restart
+ 1713 cd ../../
+ 1714 cd ../../Xoxf/
+ 1715 ls
+ 1716 mkdir testing_scanner
+ 1717 cp fastas/mdh_marine_xox_reference_sequences.faa testing_scanner/
+ 1718 cd testing_scanner/
+ 1719 python ~/scripts/gene_scanner.py -hmm ../hmms/MDH_Xoxf_MxaF.hmm -p mdh_marine_xox_reference_sequences.faa -fo mdh_testseqs.faa -ht 
+mdh_testtable.tsv -threads 4
+ 1720 ls
+ 1721 grep ">" mdh_testseqs.faa | wc -l
+ 1722 grep ">" mdh_marine_xox_reference_sequences.faa | wc -l
+ 1723 grep ">" mdh_marine_xox_reference_sequences.faa | head -n 5
+ 1724 grep ">" mdh_testseqs.faa | head -n 5
+ 1725 grep "xoxF2_68349555_13508_uncultured_bacterium_BAC10-4_fosmid" mdh_marine_xox_reference_sequences.faa
+ 1726 nano mdh_marine_xox_reference_sequences.faa
+ 1727 nano mdh_testseqs.faa
+ 1728 cd ..
+ 1729 ls
+ 1730 cd Angelo/Angelo_2016/Scanning/
+ 1731 ls
+ 1732 head MDH_Xoxf_MxaF_hmmsearch.out
+ 1733 mv MDH_Xoxf_MxaF_hmmsearch.out Mad1_100_16/
+ 1734 cd Mad1_100_16/
+ 1735 ls
+ 1736 python
+ 1737 biotite
+ 1738 ls
+ 1739 history
+ 1740 cd ..
+ 1741 ls
+ 1742 cd ..
+ 1743 ls
+ 1744 >run_scanner.py
+ 1745 nano run_scanner.py
+ 1746 python run_scanner.py
+ 1747 nano run_scanner.py
+ 1748 python run_scanner.py
+ 1749 ls
+ 1750 ls contigs
+ 1751 ls contigs/*.faa
+ 1752 python
+ 1753 nano run_scanner.py
+ 1754 python run_scanner.py
+ 1755 nano run_scanner.py
+ 1756 python run_scanner.py
+ 1757 ls
+ 1758 nano run_scanner.py
+ 1759 mv Mad1_100_16.proteins_xoxf_hitstable.tsv Scanning/Mad1_100_16.proteins/
+ 1760 mv Mad1_115_16.proteins_xoxf_hitstable.tsv Scanning/Mad1_115_16.proteins/
+ 1761 mv Mad1_20_16.proteins_xoxf_hitstable.tsv Scanning/Mad1_20_16.proteins/
+ 1762 mv Sage1_L_113_16.proteins.1_xoxf_hitstable.tsv Scanning/Sage1_L_113_16.proteins.1/
+ 1763 cd Scanning/
+ 1764 ls
+ 1765 rm -rf Mad1_100_16 Sage1_L_113_16
+ 1766 ls
+ 1767 cd ..
+ 1768 ls
+ 1769 cd Angelo_2014_NCBI/
+ 1770 ls
+ 1771 history | grep gene_scanner
+ 1772 python ~/scripts/gene_scanner.py -hmm ../../Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -threads 4 -gg -fo 
+angelo_2014_xoxfmdh_hits.faa -ids angelo_2014_xoxfmdh_ids.tsv -ht angelo_2014_xoxfmdh_hitstable.tsv
+ 1773 python ~/scripts/gene_scanner.py -hmm ../../Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -threads 4 -gg -fo 
+angelo_2014_xoxfmdh_hits.faa -ht angelo_2014_xoxfmdh_hitstable.tsv
+ 1774 ls
+ 1775 ls xoxf_mdh_search/
+ 1776 rm xoxf_mdh_search/*.tsv xoxf_mdh_search/*.csv xoxf_mdh_search/*.mfaa
+ 1777 ls
+ 1778 mv angelo_2014_xoxfmdh_hits.faa angelo_2014_xoxfmdh_hits* xoxf_mdh_search/
+ 1779 ls
+ 1780 ls xoxf_mdh_search/
+ 1781 mv MDH_Xoxf_MxaF_hmmsearch.out xoxf_mdh_search/
+ 1782 cd xoxf_mdh_search/
+ 1783 ls
+ 1784 jupyter notebook
+ 1785 ls
+ 1786 cd individual_bin_hits/
+ 1787 ls
+ 1788 rm *
+ 1789 cd ..
+ 1790 jupyter notebook
+ 1791 ls
+ 1792 cd id
+ 1793 cd individual_bin_hits/
+ 1794 ls
+ 1795 cd ..
+ 1796 ls
+ 1797 python
+ 1798 ls
+ 1799 cd individual_bin_hits/
+ 1800 ls
+ 1801 cd ..
+ 1802 ls
+ 1803 cp individual_bin_hits/Acidobacteria_gp6_AA42_xoxf_hits.faa .
+ 1804 mkdir GP6_AA42
+ 1805 mv Acidobacteria_gp6_AA42_xoxf_hits.faa GP6_AA42/
+ 1806 cd GP6_AA42/
+ 1807 makeblastdb -h
+ 1808 makeblastdb -in Acidobacteria_gp6_AA42_xoxf_hits.faa -input_type prot -out GP6_DB
+ 1809 makeblastdb -in Acidobacteria_gp6_AA42_xoxf_hits.faa -input_type 'prot' -out GP6_DB
+ 1810 makeblastdb -in Acidobacteria_gp6_AA42_xoxf_hits.faa -input_type 'prot'
+ 1811 makeblastdb -in Acidobacteria_gp6_AA42_xoxf_hits.faa -input_type prot
+ 1812 makeblastdb -help
+ 1813 makeblastdb -in Acidobacteria_gp6_AA42_xoxf_hits.faa -out GP6_DB
+ 1814 makeblastdb -in Acidobacteria_gp6_AA42_xoxf_hits.faa -out GP6_DB -dbtype prot
+ 1815 blastp -db GP6_DB -query Acidobacteria_gp6_AA42_xoxf_hits.faa -outfmt 6 -out all-vs-all.tsv -num_threads 4
+ 1816 ls
+ 1817 head all-vs-all.tsv
+ 1818 grep ">" Acidobacteria_gp6_AA42_xoxf_hits.faa | head -n 5
+ 1819 jupyter notebook
+ 1820 ls
+ 1821 cp numpy\ distmat\ from\ blastp\ outfmt\ 6.ipynb ~/Documents/Berkeley/
+ 1822 cd ~
+ 1823 cd Documents/
+ 1824 ls
+ 1825 cd Berkeley/GTDB/
+ 1826 ls
+ 1827 ls -thora
+ 1828 biotite
+ 1829 cd ~/scripts/
+ 1830 git add .
+ 1831 git commit -m "fixing error; significant reduction in complexity for gene_scanner"
+ 1832 git push -uf origin master
+ 1833 cd ~/Documents/Berkeley/Xoxf/hmms/
+ 1834 ls
+ 1835 htop
+ 1836 python
+ 1837 atom ~/scripts/Embedder.py
+ 1838 cd ~/Documents/
+ 1839 ls
+ 1840 cd Jacob/
+ 1841 ls
+ 1842 cd Sim_Genomes/
+ 1843 ls
+ 1844 cd Embedder/
+ 1845 ls
+ 1846 atom Embedder.py
+ 1847 atom ~/scripts/
+ 1848 cd ~/Documents/
+ 1849 ls
+ 1850 cd Jacob/
+ 1851 ls
+ 1852 mkdir scratch
+ 1853 cd scratch/
+ 1854 >stupid filename.py
+ 1855 ls
+ 1856 rm stupid
+ 1857 ls
+ 1858 cd ../../Berkeley/
+ 1859 ls
+ 1860 cd Angelo/
+ 1861 ls
+ 1862 cd Angelo_2014_NCBI/
+ 1863 ls
+ 1864 cd xoxf_mdh_search/
+ 1865 ls
+ 1866 cd GP6_AA42/
+ 1867 ls
+ 1868 jupyter notebook
+ 1869 ls
+ 1870 mafft --localpair --maxiterate 1000 --thread 4 Acidobacteria_gp6_AA42_xoxf_hits.faa >GP6_AA42_XoxfMdh_ALN.faa
+ 1871 ls
+ 1872 mkdir tree
+ 1873 cd tree
+ 1874 ln -s ../GP6_AA42_XoxfMdh_ALN.faa
+ 1875 iqtree-omp -s GP6_AA42_XoxfMdh_ALN.faa -bb 1000 -nt AUTO -m TEST
+ 1876 ls
+ 1877 cat GP6_AA42_XoxfMdh_ALN.faa.contree
+ 1878 aliview GP6_AA42_XoxfMdh_ALN.faa
+ 1879 jalview &
+ 1880 cd ~/Documents/Berkeley/
+ 1881 >Lanmodulin_Methylobacterium_extorquens.faa
+ 1882 nano Lanmodulin_Methylobacterium_extorquens.faa
+ 1883 mkdir Lanmodulin
+ 1884 mv Lanmodulin* Lanmodulin
+ 1885 cd Lanmodulin/
+ 1886 ls
+ 1887 mv Lanmodulin_Blastp_ALN.txt Lanmodulin_Blastp_ALN.mfaa
+ 1888 hmmbuild -h
+ 1889 hmmbuild Methylobacterium_lanmodulin.hmm Lanmodulin_Blastp_ALN.mfaa
+ 1890 nano Lanmodulin_Blastp_ALN.mfaa
+ 1891 mv Lanmodulin_Blastp_ALN.mfaa Lanmodulin_Blastp.faa
+ 1892 mafft --localpair --maxiterate 1000 Lanmodulin_Blastp.faa Lanmodulin_Blastp_Methylobacterium_ALN.mfaa
+ 1893 mafft --localpair --maxiterate 1000 Lanmodulin_Blastp.faa > Lanmodulin_Blastp_Methylobacterium_ALN.mfaa
+ 1894 hmmbuild Methylobacterium_lanmodulin.hmm Lanmodulin_Blastp_Methylobacterium_ALN.mfaa
+ 1895 cd ../Angelo/Angelo_2014_NCBI/
+ 1896 ls
+ 1897 history | grep gene_scanner
+ 1898 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Lanmodulin/Methylobacterium_lanmodulin.hmm -p angelo2014.proteins.faa -fo 
+angelo_2014_LanM_hits.faa -ht test_alt/angelo_2014_LanM_hitstable.tsv -gg -threads 4
+ 1899 python ~/scripts/gene_scanner.py -hmm ~/Documents/Berkeley/Xoxf/hmms/MDH_Xoxf_MxaF.hmm -p angelo2014.proteins.faa -fo 
+test_alt/angelo_2014_xoxfmdh_hits.faa -ids test_alt/angelo_2014_xoxfmdh_ids.csv -ht test_alt/angelo_2014_xoxfmdh_hitstable.tsv -gg -threads 4
+ 1900 ls
+ 1901 mkdir lanmodulin_search
+ 1902 rm MDH_Xoxf_MxaF_hmmsearch.out
+ 1903 ls
+ 1904 ls test_alt/
+ 1905 mv test_alt/angelo_2014_LanM_hitstable.tsv lanmodulin_search/
+ 1906 ls
+ 1907 mv angelo_2014_LanM_hits.faa lanmodulin_search/
+ 1908 mv Methylobacterium_lanmodulin_hmmsearch.out lanmodulin_search/
+ 1909 cd lan
+ 1910 cd lanmodulin_search/
+ 1911 ls
+ 1912 python
+ 1913 cd ..
+ 1914 jupyter notebook
+ 1915 history | grep "gene_scanner"
+ 1916 cd ~/Documents/Berkeley/
+ 1917 ls
+ 1918 cd Lanmodulin/
+ 1919 ls
+ 1920 aliview Lanmodulin_Blastp_Methylobacterium_ALN.mfaa
+ 1921 python ~/scripts/gene_scanner.py -h
+ 1922 ls
+ 1923 cd ../Angelo/Angelo_2016/Scanning/
+ 1924 ls
+ 1925 cd Sage1_L_113_16.proteins.1/
+ 1926 ls
+ 1927 aliview Sage1_L_113_16.proteins.1_lanm_ALN.mfaa
+ 1928 aliview Sage1_L_113_16.proteins.1_xoxfmdh_ALN.mfaa
+ 1929 cd ..
+ 1930 ls
+ 1931 aliview Sage1_L_113_16.proteins.1_lanm_ALN.mfaa
+ 1932 ls
+ 1933 mv Mad1_100_16.proteins_lanm_ALN.mfaa Scanning/Mad1_100_16.proteins/
+ 1934 mv Mad1_115_16.proteins_lanm_ALN.mfaa Scanning/Mad1_115_16.proteins/
+ 1935 mv Sage1_L_113_16.proteins.1_lanm_ALN.mfaa Scanning/Sage1_L_113_16.proteins.1/
+ 1936 ls
+ 1937 aliview Mad1_20_16.proteins_lanm_ALN.mfaa
+ 1938 mv Mad1_20_16.proteins_lanm_ALN.mfaa Scanning/Mad1_20_16.proteins/
+ 1939 ls
+ 1940 cat Scanning/Mad1_100_16.proteins/Mad1_100_16.proteins_lanm.mfaa Scanning/Mad1_115_16.proteins/Mad1_115_16.proteins_lanm.mfaa 
+Scanning/Mad1_20_16.proteins/Mad1_20_16.proteins_lanm.mfaa Scanning/Sage1_L_113_16.proteins.1/Sage1_L_113_16.proteins.1_lanm.mfaa 
+~/Documents/Berkeley/Lanmodulin/Lanmodulin_Blastp.faa all_lanmodulin.faa
+ 1941 cat Scanning/Mad1_100_16.proteins/Mad1_100_16.proteins_lanm.mfaa Scanning/Mad1_115_16.proteins/Mad1_115_16.proteins_lanm.mfaa 
+Scanning/Mad1_20_16.proteins/Mad1_20_16.proteins_lanm.mfaa Scanning/Sage1_L_113_16.proteins.1/Sage1_L_113_16.proteins.1_lanm.mfaa 
+~/Documents/Berkeley/Lanmodulin/Lanmodulin_Blastp.faa >all_lanmodulin.faa
+ 1942 ls
+ 1943 mkdir analysis
+ 1944 mv all_lanmodulin.faa analysis/
+ 1945 cd analysis/
+ 1946 ls
+ 1947 mafft --localpair --maxiterate 1000 --thread 4 all_lanmodulin.faa all_lanmodulin_ALN.mfaa
+ 1948 mafft --localpair --maxiterate 1000 --thread 4 all_lanmodulin.faa> all_lanmodulin_ALN.mfaa
+ 1949 mkdir lanm_tree
+ 1950 cd lanm_tree/
+ 1951 ln -s ../all_lanmodulin_ALN.mfaa
+ 1952 iqtree-omp -s all_lanmodulin_ALN.mfaa -bb 1000 -nt AUTO -m TEST
+ 1953 iqtree-omp -s all_lanmodulin_ALN.mfaa -bb 1000 -nt AUTO -m WAG+G+I
+ 1954 fg
+ 1955 ls
+ 1956 pwd
+ 1957 ls
+ 1958 jalview all_lanmodulin_ALN.mfaa
+ 1959 berkeley
+ 1960 vpn disconnect
+ 1961 berkeley
+ 1962 ls
+ 1963 cd Documents/Berkeley/Angelo/Angelo_2016/
+ 1964 ls
+ 1965 cd Scanning/
+ 1966 ls
+ 1967 ls Mad1_100_16.proteins/
+ 1968 cd ..
+ 1969 ls
+ 1970 cd analysis/
+ 1971 ls
+ 1972 grep ">" all_lanmodulin.faa | head -n 5
+ 1973 ls
+ 1974 jupyter notebook
+ 1975 head ~/scripts/gene_scanner.py
+ 1976 htop
+ 1977 ls
+ 1978 htop
+ 1979 biotite
+ 1980 cd ..
+ 1981 ls
+ 1982 cd contigs_gz/
+ 1983 sftp jwestrob@biotite.berkeley.edu
+ 1984 cd Documents/
+ 1985 ls
+ 1986 cd Jacob/
+ 1987 ls
+ 1988 cd Sim_Genomes/
+ 1989 ls
+ 1990 find . -name "*.ipynb"
+ 1991 cd ../..
+ 1992 find . -name "*.ipynb"
+ 1993 find . -name "UMAP.ipynb"
+ 1994 cd ..
+ 1995 find . -name "UMAP.ipynb"
+ 1996 dale
+ 1997 nano ~/scripts/dale.R
+ 1998 cd Documents/Berkeley/Angelo/Angelo_2016/
+ 1999 ls
+ 2000 cd analysis/
+ 2001 ls
+ 2002 cd LanMA1_Genomic_Contexts/
+ 2003 ls
+ 2004 ls ../../contigs/individual_bin_proteins/Mad1_115_16.proteins/
+ 2005 ls ../../contigs/individual_bin_proteins/Mad1_115_16.proteins/*UNK*
+ 2006 head ~/scripts/gene_scanner.py
+ 2007 htop
+ 2008 cd ..
+ 2009 grep "16931" LanMA1.faa
+ 2010 grep "26516" LanMA1.faa
+ 2011 grep "261506" LanMA1.faa
+ 2012 cd ..
+ 2013 cd ~/scripts/
+ 2014 >protein_distmat.py
+ 2015 atom protein_distmat.py
+ 2016 cat ~/scripts/dale.R
+ 2017 R
+ 2018 python protein_distmat.py
+ 2019 python protein_distmat.py -h
+ 2020 history | grep makeblastdb
+ 2021 python
+ 2022 history | nano
