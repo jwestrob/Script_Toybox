@@ -64,7 +64,7 @@ def run_hmmsearch(hmmfile, cwd):
             '_hmmsearch.out --notextw --cpu ' + str(threads) + ' ' + hmmfile + \
             ' ' + protfile)
     os.system('hmmsearch -o ' + cwd + '/' + hmmfile.split('/')[-1].split('.hmm')[0] + \
-            '_hmmsearch.out  --notextw -E ' + str(threshold) + '--cpu ' + str(threads) + ' ' + hmmfile + \
+            '_hmmsearch.out  --notextw -E ' + str(threshold) + ' --cpu ' + str(threads) + ' ' + hmmfile + \
             ' ' + protfile)
     print('------------------------------------------------------------')
     return hmmfile.split('/')[-1].split('.hmm')[0] + '_hmmsearch.out'
