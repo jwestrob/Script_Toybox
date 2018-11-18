@@ -33,13 +33,7 @@ def get_context(lanm_id, contexts, hits_ids):
     contig_num = contig_feat.split('_')[0]
     print('contig_num: ', contig_num)
     #Get bin ID; check for pesky '_sub' substring that has no obvious meaning
-    if 'sub' not in lanm_id:
-        bin_id = lanm_id.split(sample_id + '_')[-1].split('_')[-1]
-        #print('bin_id: ', bin_id)
-    else:
-        bin_id = '_'.join(lanm_id.split(sample_id + '_')[1].split('_')[-2:-1]) + '_sub'
-    if bin_id == '':
-        print('Bin ID not found. Check format?')
+    bin_id = '_'.join(lanm_id.split('_scaffold_')[1].split('_')[2:])
 
     print('bin_id: ' + bin_id)
     #Directory to find individual bin proteins
