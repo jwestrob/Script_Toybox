@@ -19,12 +19,12 @@ def get_context(lanm_id, contexts, hits_ids):
     #print('_id: ', lanm_id)
     sample_id = lanm_id.split('_scaffold')[0]
     #print('sample_id: ', sample_id)
-    if concat.endswith('/'):
+    if contexts.endswith('/'):
         if not os.path.exists(contexts + sample_id):
             os.system('mkdir ' + contexts + sample_id)
     else:
         if not os.path.exists(contexts + '/' + sample_id):
-            os.system('mkdir ' + contexts + '/' + sample_id)    
+            os.system('mkdir ' + contexts + '/' + sample_id)
 
     #Get feature ID (contig number, protein number, sep='_')
     contig_feat = '_'.join((lanm_id.split('scaffold_')[1].split('_')[0], lanm_id.split('scaffold_')[1].split('_')[1]))
