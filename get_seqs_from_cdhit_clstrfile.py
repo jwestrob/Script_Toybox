@@ -50,7 +50,8 @@ def main():
 	#Print that junk to fastas
 	for index, cluster in enumerate(cluster_recs_list_filtered):
 		for rec in cluster:
-			rec.id = rec.id + '_cluster_' + str(index)
+			if 'cluster' not in rec.id:
+				rec.id = rec.id + '_cluster_' + str(index)
 		SeqIO.write(cluster, out_prefix + 'cluster_' + str(index) + '.faa', 'fasta')
 
 	print('boogie')
