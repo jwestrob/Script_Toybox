@@ -19,12 +19,13 @@ def get_context(lanm_id, contexts, hits_ids):
     #print('_id: ', lanm_id)
     sample_id = lanm_id.split('_scaffold')[0]
     #print('sample_id: ', sample_id)
-    if not os.path.exists(contexts + sample_id):
-        try:
+    if concat.endswith('/'):
+        if not os.path.exists(contexts + sample_id):
             os.system('mkdir ' + contexts + sample_id)
-        except:
-            os.system('mkdir ' + contexts + '/' + sample_id)
-    
+    else:
+        if not os.path.exists(contexts + '/' + sample_id):
+            os.system('mkdir ' + contexts + '/' + sample_id)    
+
     #Get feature ID (contig number, protein number, sep='_')
     contig_feat = '_'.join((lanm_id.split('scaffold_')[1].split('_')[0], lanm_id.split('scaffold_')[1].split('_')[1]))
     print('contig_feat: ', contig_feat)
@@ -39,13 +40,13 @@ def get_context(lanm_id, contexts, hits_ids):
         bin_id = '_'.join(lanm_id.split(sample_id + '_')[1].split('_')[-2:-1]) + '_sub'
     if bin_id == '':
         print('Bin ID not found. Check format?')
-    
+
     print('bin_id: ' + bin_id)
     #Directory to find individual bin proteins
     sample_hits_dir = '/home/jwestrob/2016_Angelo/Protein_Fastafiles/' + sample_id + '/individual_bin_fastas/'
 
     out_recs = []
-    
+
     #Why exactly do we need a try/catch here?
     try:
         #print(sample_hits_dir + bin_id + '.faa', 'fasta')
@@ -78,9 +79,9 @@ def get_context(lanm_id, contexts, hits_ids):
     return
 
 def main():
-	
+
         context = os.path.join(os.getcwd(), outdir)
-        
+
         if not os.path.exists(context):
             os.system('mkdir ' + context)
         hits_recs = list(SeqIO.parse(os.path.join(os.getcwd(),infile), 'fasta'))
@@ -93,5 +94,3 @@ def main():
 
 if __name__ == "__main__":
         main()
-
-
