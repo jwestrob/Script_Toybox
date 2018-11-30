@@ -91,7 +91,7 @@ def main():
     #Save distmat as .npy object
     np.save(outdir + '/' + outfile, distmat)
 
-    np.savetxt(outdir + '/unique_ids.txt', np.array(unique_entries), delimiter='\t')
+    np.savetxt(outdir + '/unique_ids.txt', np.array(unique_entries), delimiter='\t', fmt='%s')
 
     if tsne:
         two_embedding = TSNE(n_components=2, n_iter=2000, perplexity=50).fit_transform(distmat)

@@ -72,17 +72,20 @@ def run_hmmsearch(hmmfile, cwd):
 def dale():
     os.system('Rscript ~/scripts/dale.R')
 
-def get_hits(infile):
+def get_hits_and_evalues(infile):
     hits = []
+    e_values = []
     with open(infile, 'r') as handle:
         for record in SearchIO.parse(handle, 'hmmer3-text'):
             hits.append(list(record))
 
+
     hits = hits[0]
 
     good_hits = [hit._id for hit in hits]
+    e_values = [hit.evalue for hit in hits]
 
-    return good_hits
+    return good_hits, e_values
 
 def write_hits(hits):
     print("Writing HMM hit FASTA contig IDs to " + idfile)
@@ -141,7 +144,7 @@ def main():
     hmm_output_file = run_hmmsearch(hmmfile, cwd)
 
     #Cool. Now let's get the IDs for the hits.
-    hits = get_hits(hmm_output_file)
+    hits, evalues = get_hits_and_evalues(hmm_output_file)
 
     if idfile is not None:
         #Write hits names to file
@@ -181,14 +184,17 @@ def main():
         for element in hits_table:
             element.append(0)
 
-
+        for element in hits_table:
+            idx = hits_ids.index(element[0])
+            evalue = evalues[idx]
+            element.append(evalue)
 
         hits_ids = pd.Series(hits_ids)
         hits_ids_counts = hits_ids.value_counts()
 
 
 
-        header = ['Organism_ID', 'num_hits']
+        header = ['Organism_ID', 'num_hits', 'evalue']
 
         df = pd.DataFrame(hits_table, columns=header).drop_duplicates()
 
