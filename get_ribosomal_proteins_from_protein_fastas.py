@@ -75,7 +75,10 @@ def get_recs_for_hits(hits_ids, hmm, fastadict, fastalist_wpath, fastalist, outd
             continue
         else:
             # print(hit)
-            genome = fastadict[hit.split('.peg')[0]]
+            if '.peg' in hit:
+                genome = fastadict[hit.split('.peg')[0]]
+            elif '# ID=' in hit:
+                genome = fastadict['_'.join(hit.split(' #')[0].split('_')[0:-2])]
             recs = list(SeqIO.parse(fastalist_wpath[fastalist.index(genome)], 'fasta'))
             hit_rec = list(filter(lambda x: x.id == hit, recs))[0]
             hit_rec.id = genome + '|' + hit
