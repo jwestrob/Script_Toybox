@@ -69,6 +69,10 @@ def extract_hits_by_outfile(dir, infile):
 
 def get_recs_for_hits(hits_ids, hmm, fastadict, fastalist_wpath, fastalist, outdir):
     # flat_hits = [item for sublist in hits_ids for item in sublist]
+    print('FASTADICT:')
+    print(fastadict)
+    print('fastalist_wpath:')
+    print(fastalist_wpath)
     hit_recs = []
     for hit in hits_ids:
         if hit is None:
