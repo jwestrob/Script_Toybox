@@ -71,8 +71,6 @@ def get_recs_for_hits(hits_ids, hmm, fastadict, fastalist_wpath, fastalist, outd
     # flat_hits = [item for sublist in hits_ids for item in sublist]
     print('FASTADICT:')
     print(fastadict)
-    print('fastalist_wpath:')
-    print(fastalist_wpath)
     hit_recs = []
     for hit in hits_ids:
         if hit is None:
@@ -127,7 +125,13 @@ def main():
 
     def get_fastaheader_id(fasta):
         for rec in SeqIO.parse(fasta, 'fasta'):
-            id = rec.id.split('.peg')[0]
+            if '.peg' in rec.id:
+                id = rec.id.split('.peg')[0]
+            elif '|' in rec.id:
+                id = rec.id.split('|')[0]
+            else:
+                print('Unrecognized header found. Aborting.')
+                sys.exit()
             break
         return id
 
