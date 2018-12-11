@@ -69,6 +69,7 @@ def extract_hits_by_outfile(dir, infile):
 
 def get_recs_for_hits(hits_ids, hmm, fastadict, fastalist_wpath, fastalist, outdir):
     # flat_hits = [item for sublist in hits_ids for item in sublist]
+    if hmm == 'Ribosomal_L1' or hmm == 'Ribosomal_L2' or hmm == 'Ribosomal_L3' or
     print('FASTADICT:')
     print(fastadict)
     hit_recs = []
@@ -174,16 +175,16 @@ def main():
             #Get name of appropriate hmmfile, path
             relevant_outfiles.append(list(filter(lambda x: hmm in x, os.listdir(outdir + '/' + fasta))))
         # Add HMM outfiles to a list; find these with extract_hits_by_outfile
-        hits_by_hmm.append(list(p.map(lambda relevant_outfile: extract_hits_by_outfile( \
+        hits_by_hmm.append([list(p.map(lambda relevant_outfile: extract_hits_by_outfile( \
             outdir + '/' + fastalist[relevant_outfiles.index(relevant_outfile)],
-            relevant_outfile), relevant_outfiles)))
+            relevant_outfile), relevant_outfiles)), hmm])
 
 
     print("Making hits matrix...")
     hitstable = np.zeros((len(hmmlist), len(fastalist)))
     # Mark hits in table
     for hmm_idx, hmm in enumerate(hits_by_hmm):
-        for genome_idx, genome_hits in enumerate(hmm):
+        for genome_idx, genome_hits in enumerate(hmm[0]):
             if type(genome_hits) is list:
                 hits = len(genome_hits)
             elif type(genome_hits) is str:
@@ -199,8 +200,9 @@ def main():
     if len(hits_by_hmm) == 42:
         sys.exit()
     if not no_seqs:
+        #The problem is clearly in this function call
         hmms_written = list(p.map(lambda hits:
-                   get_recs_for_hits(hits, hmmlist[hits_by_hmm.index(hits)], fastadict, fastalist_wpath, fastalist,
+                   get_recs_for_hits(hits[0], hits[1], fastadict, fastalist_wpath, fastalist,
                                      outdir),
                    hits_by_hmm))
         for hmm in hmmlist:
