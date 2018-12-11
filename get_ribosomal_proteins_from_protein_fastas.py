@@ -171,8 +171,9 @@ def main():
         print("Extracting hits for: ", hmm)
         relevant_outfiles = []
         for fasta in fastalist:
+            #Get name of appropriate hmmfile, path
             relevant_outfiles.append(list(filter(lambda x: hmm in x, os.listdir(outdir + '/' + fasta))))
-        # Add HMM outfiles to a list; find these with
+        # Add HMM outfiles to a list; find these with extract_hits_by_outfile
         hits_by_hmm.append(list(p.map(lambda relevant_outfile: extract_hits_by_outfile( \
             outdir + '/' + fastalist[relevant_outfiles.index(relevant_outfile)],
             relevant_outfile), relevant_outfiles)))
@@ -194,6 +195,9 @@ def main():
 
 
     # Grab sequences
+    print('len(hits_by_hmm):' ,len(hits_by_hmm))
+    if len(hits_by_hmm) == 42:
+        sys.exit()
     if not no_seqs:
         list(p.map(lambda hits:
                    get_recs_for_hits(hits, hmmlist[hits_by_hmm.index(hits)], fastadict, fastalist_wpath, fastalist,
