@@ -87,7 +87,7 @@ def get_recs_for_hits(hits_ids, hmm, fastadict, fastalist_wpath, fastalist, outd
             hit_recs.append(hit_rec)
     print("Writing hits for: ", hmm)
     SeqIO.write(hit_recs, outdir + '/fastas/' + hmm + '.faa', 'fasta')
-    return
+    return hmm
 
 
 def main():
@@ -199,10 +199,14 @@ def main():
     if len(hits_by_hmm) == 42:
         sys.exit()
     if not no_seqs:
-        list(p.map(lambda hits:
+        hmms_written = list(p.map(lambda hits:
                    get_recs_for_hits(hits, hmmlist[hits_by_hmm.index(hits)], fastadict, fastalist_wpath, fastalist,
                                      outdir),
                    hits_by_hmm))
+        for hmm in hmmlist:
+            if hmm not in hmms_written:
+                print(hmm)
+        sys.exit()
 
     hits = pd.DataFrame(hitstable).T
     hits.columns = hmmlist
