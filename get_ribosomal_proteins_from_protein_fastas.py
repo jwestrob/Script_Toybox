@@ -162,7 +162,9 @@ def main():
     # Make matrix of zeros to store hits
 
     hits_by_hmm = []
-
+    if len(hmmlist) != 48:
+        print('incorrect hmmlist')
+        sys.exit()
     # test = extract_hits_by_outfile('/home/jacob/Documents/Berkeley/test_ribosomal_nonsense/943347.4.PATRIC', ['943347.4.PATRIC_RecR_hmmsearch.out'])
     # Declare local version of fastalist because global variables are unavailable to lambda functions (??? python...)
     for hmm in hmmlist:
