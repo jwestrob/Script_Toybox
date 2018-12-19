@@ -59,7 +59,7 @@ def extract_hits_by_outfile(dir, infile):
     e_values = [hit.evalue for hit in hits]
     # If you have more than one hit, go with the hit that has the best e-value
     if len(good_hits) > 1:
-        return good_hits[e_values.index(max(e_values))]
+        return good_hits[e_values.index(min(e_values))]
     else:
         try:
             return good_hits[0]
