@@ -69,9 +69,9 @@ def extract_hits_by_outfile(dir, infile):
 
 def get_recs_for_hits(hits_ids, hmm, fastadict, fastalist_wpath, fastalist, outdir):
     # flat_hits = [item for sublist in hits_ids for item in sublist]
-    if hmm == 'Ribosomal_L1' or hmm == 'Ribosomal_L2' or hmm == 'Ribosomal_L3' or
-    print('FASTADICT:')
-    print(fastadict)
+    #if hmm == 'Ribosomal_L1' or hmm == 'Ribosomal_L2' or hmm == 'Ribosomal_L3' or
+    #print('FASTADICT:')
+    #print(fastadict)
     hit_recs = []
     for hit in hits_ids:
         if hit is None:
@@ -136,7 +136,10 @@ def main():
             break
         return id
 
+    #Get list of fasta header IDs by mapping to get_fastaheader_id fn
     fasta_header_ids = list(map(get_fastaheader_id, fastalist_wpath))
+
+    #Make fasta dictionary (hopefully deprecated, let's see; dec 18 3:58 mountain time)
     fastadict = dict(zip(fasta_header_ids, fastalist))
 
     # For each fasta, run all hmms
@@ -146,6 +149,8 @@ def main():
             # Make outdir for HMMs
             if not os.path.exists(fastaoutdir):
                 os.system('mkdir ' + outdir + '/' + fastafile.split('/')[-1].split('.faa')[0])
+            #Make symbolic link 
+            os.system('ln -s ' + fastafile + ' ' + fastaoutdir + '/')
             hmm_outfiles.append([])
 
             # Run all HMMs for fastafile
