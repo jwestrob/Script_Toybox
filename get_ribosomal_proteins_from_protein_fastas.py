@@ -149,7 +149,7 @@ def main():
             # Make outdir for HMMs
             if not os.path.exists(fastaoutdir):
                 os.system('mkdir ' + outdir + '/' + fastafile.split('/')[-1].split('.faa')[0])
-            #Make symbolic link 
+            #Make symbolic link
             os.system('ln -s ' + fastafile + ' ' + fastaoutdir + '/')
             hmm_outfiles.append([])
 
@@ -168,11 +168,8 @@ def main():
     # Make matrix of zeros to store hits
 
     hits_by_hmm = []
-    if len(hmmlist) != 48:
-        print('incorrect hmmlist')
-        sys.exit()
+
     # test = extract_hits_by_outfile('/home/jacob/Documents/Berkeley/test_ribosomal_nonsense/943347.4.PATRIC', ['943347.4.PATRIC_RecR_hmmsearch.out'])
-    # Declare local version of fastalist because global variables are unavailable to lambda functions (??? python...)
     for hmm in hmmlist:
         print("Extracting hits for: ", hmm)
         relevant_outfiles = []
@@ -200,10 +197,6 @@ def main():
                 hitstable[hmm_idx][genome_idx] = hits
 
 
-    # Grab sequences
-    print('len(hits_by_hmm):' ,len(hits_by_hmm))
-    if len(hits_by_hmm) == 42:
-        sys.exit()
     if not no_seqs:
         #The problem is clearly in this function call
         hmms_written = list(p.map(lambda hits:
@@ -223,7 +216,7 @@ def main():
     cols.pop(cols.index('id'))
     hits = hits[['id'] + cols]
     hits.to_csv(outdir + '/HITSTABLE.tsv', sep='\t', index=False)
-    print(hits)
+
     # recs_by_hmm = list(map(lambda hits: get_recs_for_hits(hits), hits_by_hmm))
     print('boogie')
 
