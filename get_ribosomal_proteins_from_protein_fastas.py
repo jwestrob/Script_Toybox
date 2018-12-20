@@ -177,19 +177,16 @@ def main():
         #Get name of appropriate hmmfile, path
         hmmhits_for_fasta = list(filter(lambda x: hmm in x, os.listdir(fastadir)))
         hits = extract_hits_by_outfile(fastadir, hmmhits_for_fasta)
-        return [hits, hmm]
+        return hits
 
     for hmm in hmmlist:
         print("Extracting hits for: ", hmm)
         relevant_outfiles = []
-        hits_by_hmm.append(list(p.map(lambda fastaname:
+        hits_by_hmm.append([list(p.map(lambda fastaname:
                                         extract_all_hits(fastaname, hmm),
-                                        fastalist)))
+                                        fastalist)), hmm])
 
-    print('hits_by_hmm[0]:')
-    print(hits_by_hmm[0])
-    print(len(hits_by_hmm))
-    sys.exit()
+
     print("Making hits matrix...")
     hitstable = np.zeros((len(hmmlist), len(fastalist)))
 
