@@ -170,7 +170,7 @@ def main():
     hits_by_hmm = []
     #Declare function to get hits for each HMM
     def extract_all_hits(fastaname, hmm):
-        fastadir = outdir + '/' + fasta
+        fastadir = outdir + '/' + fastaname
         #Get name of appropriate hmmfile, path
         hmmhits_for_fasta = list(filter(lambda x: hmm in x, os.listdir(fastadir)))
         hits = extract_hits_by_outfile(fastadir, hmmhits_for_fasta)
