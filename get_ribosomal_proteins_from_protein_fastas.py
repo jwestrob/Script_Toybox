@@ -68,10 +68,13 @@ def extract_hits_by_outfile(dir, infile):
 
 
 def get_recs_for_hits(hits_ids, hmm, fastadict, fastalist_wpath, fastalist, outdir):
-    # flat_hits = [item for sublist in hits_ids for item in sublist]
-    #if hmm == 'Ribosomal_L1' or hmm == 'Ribosomal_L2' or hmm == 'Ribosomal_L3' or
-    #print('FASTADICT:')
-    #print(fastadict)
+    print("Hits IDs:")
+    print(hits_ids)
+
+    print('hmm'):
+    print(hmm)
+
+    sys.exit()
     hit_recs = []
     for hit in hits_ids:
         if hit is None:
