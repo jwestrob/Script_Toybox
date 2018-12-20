@@ -186,7 +186,9 @@ def main():
                                         extract_all_hits(fastaname, hmm),
                                         fastalist)))
 
-
+    print('hits_by_hmm[0]:')
+    print(hits_by_hmm[0])
+    sys.exit()
     print("Making hits matrix...")
     hitstable = np.zeros((len(hmmlist), len(fastalist)))
 
