@@ -177,7 +177,7 @@ def main():
         #Get name of appropriate hmmfile, path
         hmmhits_for_fasta = list(filter(lambda x: hmm in x, os.listdir(fastadir)))
         hits = extract_hits_by_outfile(fastadir, hmmhits_for_fasta)
-        return [hits, ]
+        return [hits, hmm]
 
     for hmm in hmmlist:
         print("Extracting hits for: ", hmm)
