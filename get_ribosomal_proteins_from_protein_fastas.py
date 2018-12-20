@@ -168,22 +168,25 @@ def main():
     # Make matrix of zeros to store hits
 
     hits_by_hmm = []
+    #Declare function to get hits for each HMM
+    def extract_all_hits(fastaname, hmm):
+        fastadir = outdir + '/' + fasta
+        #Get name of appropriate hmmfile, path
+        hmmhits_for_fasta = list(filter(lambda x: hmm in x, os.listdir(fastadir)))
+        hits = extract_hits_by_outfile(fastadir, hmmhits_for_fasta)
+        return [hits, ]
 
-    # test = extract_hits_by_outfile('/home/jacob/Documents/Berkeley/test_ribosomal_nonsense/943347.4.PATRIC', ['943347.4.PATRIC_RecR_hmmsearch.out'])
     for hmm in hmmlist:
         print("Extracting hits for: ", hmm)
         relevant_outfiles = []
-        for fasta in fastalist:
-            #Get name of appropriate hmmfile, path
-            relevant_outfiles.append(list(filter(lambda x: hmm in x, os.listdir(outdir + '/' + fasta))))
-        # Add HMM outfiles to a list; find these with extract_hits_by_outfile
-        hits_by_hmm.append([list(p.map(lambda relevant_outfile: extract_hits_by_outfile( \
-            outdir + '/' + fastalist[relevant_outfiles.index(relevant_outfile)],
-            relevant_outfile), relevant_outfiles)), hmm])
+        hits_by_hmm.append(list(p.map(lambda fastaname:
+                                        extract_all_hits(fastaname, hmm),
+                                        fastalist)))
 
 
     print("Making hits matrix...")
     hitstable = np.zeros((len(hmmlist), len(fastalist)))
+
     # Mark hits in table
     for hmm_idx, hmm in enumerate(hits_by_hmm):
         for genome_idx, genome_hits in enumerate(hmm[0]):
@@ -197,8 +200,16 @@ def main():
                 hitstable[hmm_idx][genome_idx] = hits
 
 
+    hits = pd.DataFrame(hitstable).T
+    hits.columns = hmmlist
+    hits['id'] = fastalist
+
+    cols = list(hits.columns.values)
+    cols.pop(cols.index('id'))
+    hits = hits[['id'] + cols]
+    hits.to_csv(outdir + '/HITSTABLE.tsv', sep='\t', index=False)
+
     if not no_seqs:
-        #The problem is clearly in this function call
         hmms_written = list(p.map(lambda hits:
                    get_recs_for_hits(hits[0], hits[1], fastadict, fastalist_wpath, fastalist,
                                      outdir),
@@ -208,14 +219,7 @@ def main():
                 print(hmm)
         sys.exit()
 
-    hits = pd.DataFrame(hitstable).T
-    hits.columns = hmmlist
-    hits['id'] = fastalist
 
-    cols = list(hits.columns.values)
-    cols.pop(cols.index('id'))
-    hits = hits[['id'] + cols]
-    hits.to_csv(outdir + '/HITSTABLE.tsv', sep='\t', index=False)
 
     # recs_by_hmm = list(map(lambda hits: get_recs_for_hits(hits), hits_by_hmm))
     print('boogie')
