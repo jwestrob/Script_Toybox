@@ -71,7 +71,7 @@ def get_recs_for_hits(hits_ids, hmm, fastadict, fastalist_wpath, fastalist, outd
     print("Hits IDs:")
     print(hits_ids)
 
-    print('hmm'):
+    print('hmm:')
     print(hmm)
 
     sys.exit()
