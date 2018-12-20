@@ -188,6 +188,7 @@ def main():
 
     print('hits_by_hmm[0]:')
     print(hits_by_hmm[0])
+    print(len(hits_by_hmm))
     sys.exit()
     print("Making hits matrix...")
     hitstable = np.zeros((len(hmmlist), len(fastalist)))
