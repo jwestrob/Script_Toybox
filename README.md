@@ -1,5 +1,5 @@
 # Script_Toybox
-A bunch of stuff I've made over time working in the Hiller lab. May or may not be useful to me or anyone in the future; some of these were relatively early creations of mine.
+A bunch of stuff I've made over time working in the Hiller lab. May or may not be useful to me or anyone in the future; some of these were relatively early creations of mine. Keep in mind I wrote lots of these before I learned how to do Bash one-liners; many of these scripts became irrelevant as soon as I learned how to do an in-line for loop in Bash.
 
 ## Align_and_separate.py
 For when you have raw reads (fasta format) and a contigs file (fasta format) and you'd like to separate out the reads mapping to each contig.
