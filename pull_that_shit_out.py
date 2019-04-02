@@ -27,7 +27,7 @@ orig_len = len(out_recs)
 if ids is not None:
     for id in ids:
         for rec in in_recs:
-            if id in rec.id or id in rec.description:
+            if id == rec.id:
                 out_recs.append(rec)
 
 if idc is not None:
@@ -42,7 +42,7 @@ if idc is not None:
 
     for id in idc_list:
         for rec in in_recs:
-            if id in rec.id or id in rec.description:
+            if id == rec.id:
                 out_recs.append(rec)
 
 

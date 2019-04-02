@@ -20,6 +20,7 @@ parser.add_argument('-align', metavar='Output alignment of retrieved sequences',
                     help='Align output sequences and place in specified PATH (uses MAFFT; optionally increase accuracy (-macc))')
 parser.add_argument('-macc', action='store_true', default=False, \
                     help='Use this flag to use increased accuracy when aligning with MAFFT.')
+parser.add_argument('-evalue', metavar='Evalue threshold', help='Cutoff value for HMMSearch', default=0.1)
 parser.add_argument('-ht', metavar='hits table', help='Name of hits table to write.', default=None)
 parser.add_argument('-PAT',  help='PATRIC format data', \
                     action='store_true', default=False)
@@ -35,6 +36,7 @@ args = parser.parse_args()
 hmmfile = str(args.hmm)
 protfile = str(args.p)
 fastaout = str(args.fo)
+threshold = str(args.evalue)
 
 PATRIC = args.PAT
 ggkbase = args.gg
@@ -62,7 +64,7 @@ def run_hmmsearch(hmmfile, cwd):
             '_hmmsearch.out --notextw --cpu ' + str(threads) + ' ' + hmmfile + \
             ' ' + protfile)
     os.system('hmmsearch -o ' + cwd + '/' + hmmfile.split('/')[-1].split('.hmm')[0] + \
-            '_hmmsearch.out  --notextw --cpu ' + str(threads) + ' ' + hmmfile + \
+            '_hmmsearch.out  --notextw -E ' + str(threshold) + ' --cpu ' + str(threads) + ' ' + hmmfile + \
             ' ' + protfile)
     print('------------------------------------------------------------')
     return hmmfile.split('/')[-1].split('.hmm')[0] + '_hmmsearch.out'
@@ -70,21 +72,20 @@ def run_hmmsearch(hmmfile, cwd):
 def dale():
     os.system('Rscript ~/scripts/dale.R')
 
-def get_hits(infile):
+def get_hits_and_evalues(infile):
     hits = []
+    e_values = []
     with open(infile, 'r') as handle:
         for record in SearchIO.parse(handle, 'hmmer3-text'):
             hits.append(list(record))
 
+
     hits = hits[0]
 
-    good_hits = []
+    good_hits = [hit._id for hit in hits]
+    e_values = [hit.evalue for hit in hits]
 
-    for hit in hits:
-        if hit.evalue < 0.1:
-            good_hits.append(hit._id)
-
-    return good_hits
+    return good_hits, e_values
 
 def write_hits(hits):
     print("Writing HMM hit FASTA contig IDs to " + idfile)
@@ -143,7 +144,7 @@ def main():
     hmm_output_file = run_hmmsearch(hmmfile, cwd)
 
     #Cool. Now let's get the IDs for the hits.
-    hits = get_hits(hmm_output_file)
+    hits, evalues = get_hits_and_evalues(hmm_output_file)
 
     if idfile is not None:
         #Write hits names to file
@@ -183,14 +184,17 @@ def main():
         for element in hits_table:
             element.append(0)
 
-
+        for element in hits_table:
+            idx = hits_ids.index(element[0])
+            evalue = evalues[idx]
+            element.append(evalue)
 
         hits_ids = pd.Series(hits_ids)
         hits_ids_counts = hits_ids.value_counts()
 
 
 
-        header = ['Organism_ID', 'num_hits']
+        header = ['Organism_ID', 'num_hits', 'evalue']
 
         df = pd.DataFrame(hits_table, columns=header).drop_duplicates()
 
