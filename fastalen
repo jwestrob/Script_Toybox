@@ -1,0 +1,12 @@
+#!/usr/bin/python
+
+import os, sys
+from Bio import SeqIO
+
+fastafile = sys.argv[1]
+
+for rec in SeqIO.parse(fastafile, 'fasta'):
+	print(len(rec.seq))
+	break
+
+

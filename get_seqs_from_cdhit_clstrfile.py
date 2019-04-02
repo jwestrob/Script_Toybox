@@ -31,17 +31,20 @@ def main():
 			ID = line.split(">")[1].split("...")[0]
 			clusters_list[-1].append(ID)
 
-	for index, cluster in enumerate(clusters_list):
-		print("Length of cluster " + str(index) + " is " + str(len(cluster)))
+	#for index, cluster in enumerate(clusters_list):
+	#	print("Length of cluster " + str(index) + " is " + str(len(cluster)))
 
 	clstr_recs = list(SeqIO.parse(fastafile, 'fasta'))
 	clstr_fa_ids = [rec.id for rec in clstr_recs]
 
 	# For each id in clusters_list, get a list of the same dimension composed of the indices in original FASTA
 	# for those ids
+	
+	print("Generating indices...")
 	indices = list(map(lambda cluster: list(map(lambda x: clstr_fa_ids.index(x), cluster)), clusters_list))
 
 	#Get recs for each cluster
+	print("Getting records...")
 	cluster_recs_list = list(map(lambda cluster_indices: list(map(lambda x: clstr_recs[x], cluster_indices)), \
 														 indices))
 	#Filter out clusters below length threshold
