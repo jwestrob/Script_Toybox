@@ -14,6 +14,7 @@ def parse():
     parser.add_argument('-outdir', metavar='[output directory]', default=None, \
                         help='Directory for blastp output/db. Default: Working directory')
     parser.add_argument('-tsne', action='store_true', default=False, help='Want to run a t-SNE on it?')
+    parser.add_argument('-just_blast', action='store_true', default=False, help='Just run BLAST and make all-vs-all.tsv.')
     parser.add_argument('-t', metavar='[threads]', default=1, help='Number of threads to use.')
 
     args = parser.parse_args()
@@ -31,6 +32,7 @@ def main():
     outdir = str(args.outdir)
     t = int(args.t)
     tsne = str(args.tsne)
+    just_blast = args.just_blast
 
     if outdir is not None:
         if not os.path.exists(outdir):
@@ -53,6 +55,9 @@ def main():
     #Run BLASTP all-vs-all
     os.system('blastp -db ' + infile.split('.')[0] + ' -query ' + infile + \
                 ' -outfmt 6 -out all-vs-all.tsv -num_threads ' + str(t))
+
+    if just_blast:
+        sys.exit()
 
     if outdir is not None:
         #Run along home
