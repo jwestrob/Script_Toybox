@@ -6,6 +6,8 @@ parser = argparse.ArgumentParser(description='Take a set of names (or a single n
 
 parser.add_argument('-i', metavar='--infile', nargs=1, help='File to make subset of.')
 parser.add_argument('-o', metavar='--outfile', nargs=1, help='File to add subset to.')
+parser.add_argument('-term', metavar='--term', nargs='+', type=str, help='Terms to match in rec ID',\
+                    default=None)
 parser.add_argument('-ids', metavar='--ids', nargs='+', type=str, default=None,\
                     help='Give me a list of IDs to include.')
 parser.add_argument('-idc', nargs='?', type=str, default=None,\
@@ -14,6 +16,7 @@ parser.add_argument('-idc', nargs='?', type=str, default=None,\
 args = parser.parse_args()
 infile = args.i[0]
 outfile = args.o[0]
+term = args.term[0]
 ids = args.ids
 idc = args.idc
 
@@ -23,6 +26,11 @@ try:
 except:
     out_recs = []
 orig_len = len(out_recs)
+
+if term is not None:
+    for rec in in_recs:
+        if term in rec.id:
+            out_recs.append(rec)
 
 if ids is not None:
     for id in ids:
