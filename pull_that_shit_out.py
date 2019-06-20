@@ -16,7 +16,11 @@ parser.add_argument('-idc', nargs='?', type=str, default=None,\
 args = parser.parse_args()
 infile = args.i[0]
 outfile = args.o[0]
-term = args.term[0]
+
+if args.term is not None:
+	term = args.term[0]
+else:
+	term = None
 ids = args.ids
 idc = args.idc
 
@@ -55,4 +59,7 @@ if idc is not None:
 
 
 SeqIO.write(out_recs, outfile, 'fasta')
+if len(out_recs)-orig_len == 0:
+	print("Big whoops, no seqs!")
+	print(ids)
 print("Wrote " + str(len(out_recs)-orig_len) + " to " + outfile + ". Congratulation.")
