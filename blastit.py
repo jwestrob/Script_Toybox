@@ -1,5 +1,6 @@
 import os,sys
 import argparse
+import pandas as pd
 
 parser = argparse.ArgumentParser(description='BLASTp without looking up the damn outfmt every time.')
 
@@ -22,3 +23,9 @@ threads = args.threads
 
 os.system('blastp -outfmt "6 qseqid sseqid pident qlen length mismatch gapopen qstart qend sstart send sseq evalue bitscore" -db ' + db_name + ' -num_threads ' + threads + \
 		' -query ' + query + ' -out ' + output)
+
+header = ['qseqid', 'sseqid', 'pident', 'qlen', 'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart', 'send', 'sseq', 'evalue', 'bitscore']
+
+hits = pd.read_csv(output, sep='\t', names=header)
+
+hits.to_csv(output, index=False, sep='\t')
