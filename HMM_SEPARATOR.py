@@ -23,8 +23,12 @@ for line in f.readlines():
 
 for index, file in enumerate(files):
     name = names[index]
+    if 'rhodopsin' not in name.lower():
+        continue
     filename = name + '.hmm'
     with open(filename, 'w') as handle:
         list(map(lambda x: handle.write(x), file))
+
+
 
 os.system('Rscript ~/scripts/dale.R')

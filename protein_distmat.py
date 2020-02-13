@@ -1,5 +1,6 @@
 import os, sys, argparse, pandas as pd
-from sklearn.manifold import TSNE
+#from sklearn.manifold import TSNE
+from MulticoreTSNE import MulticoreTSNE as TSNE
 import matplotlib.pyplot as plt
 from Bio import SeqIO
 import numpy as np
@@ -15,6 +16,7 @@ def parse():
                         help='Directory for blastp output/db. Default: Working directory')
     parser.add_argument('-tsne', action='store_true', default=False, help='Want to run a t-SNE on it?')
     parser.add_argument('-just_blast', action='store_true', default=False, help='Just run BLAST and make all-vs-all.tsv.')
+    parser.add_argument('-already_blasted', action='store_true', default=False, help='Did you already run BLAST and then pandas yelled something stupid at you and dumped? use this flag')
     parser.add_argument('-t', metavar='[threads]', default=1, help='Number of threads to use.')
 
     args = parser.parse_args()
@@ -33,6 +35,7 @@ def main():
     t = int(args.t)
     tsne = str(args.tsne)
     just_blast = args.just_blast
+    blasted = args.already_blasted
 
     if outdir is not None:
         if not os.path.exists(outdir):
@@ -46,14 +49,15 @@ def main():
         os.system('ln -s ' + infile_path + ' .')
     else:
         outdir = os.getcwd()
-    #Make BLASTP database
-    os.system('makeblastdb -in ' + infile + ' -out ' + infile.split('.')[0] + ' -dbtype prot')
+    if not blasted:
+        #Make BLASTP database
+        os.system('makeblastdb -in ' + infile + ' -out ' + infile.split('.')[0] + ' -dbtype prot')
 
-    print('blastp -db ' + infile.split('.')[0] + ' -query ' + infile + \
+        print('blastp -db ' + infile.split('.')[0] + ' -query ' + infile + \
                 ' -outfmt 6 -out ' + outdir + '/all-vs-all.tsv -num_threads ' + str(t))
 
-    #Run BLASTP all-vs-all
-    os.system('blastp -db ' + infile.split('.')[0] + ' -query ' + infile + \
+        #Run BLASTP all-vs-all
+        os.system('blastp -db ' + infile.split('.')[0] + ' -query ' + infile + \
                 ' -outfmt 6 -out all-vs-all.tsv -num_threads ' + str(t))
 
     if just_blast:
@@ -70,7 +74,7 @@ def main():
     red_df = allvall[[0, 1, 2]]
 
     #Convert to numpy array
-    red_arr = red_df.as_matrix()
+    red_arr = red_df.values
 
     #Extract list of unique IDs from first column (Series)
     unique_entries = red_df[0].unique().tolist()
@@ -99,7 +103,7 @@ def main():
     np.savetxt(outdir + '/unique_ids.txt', np.array(unique_entries), delimiter='\t', fmt='%s')
 
     if tsne:
-        two_embedding = TSNE(n_components=2, n_iter=2000, perplexity=50).fit_transform(distmat)
+        two_embedding = TSNE(n_jobs=t, n_components=2, n_iter=2000, perplexity=50).fit_transform(distmat)
         pylab.scatter(two_embedding[:,0], two_embedding[:,1])
         pylab.title("2D t-SNE (protein)")
         pylab.show()
