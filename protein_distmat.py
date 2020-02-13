@@ -125,7 +125,8 @@ def main():
         np.save(outdir + '/tsne_embedding_matrix.npy', two_embedding)
         pylab.scatter(two_embedding[:,0], two_embedding[:,1])
         pylab.title("2D t-SNE (protein)")
-        pylab.show()
+        #pylab.show()
+        plt.savefig(outdir + '/tsne_embedding.png')
     
     # 305
     os.system('Rscript /home/jacob/scripts/dale.R')
