@@ -122,6 +122,7 @@ def main():
 
     if tsne:
         two_embedding = TSNE(n_jobs=t, n_components=2, n_iter=2000, perplexity=50).fit_transform(distmat)
+        np.save(outdir + '/tsne_embedding_matrix.npy', two_embedding)
         pylab.scatter(two_embedding[:,0], two_embedding[:,1])
         pylab.title("2D t-SNE (protein)")
         pylab.show()
