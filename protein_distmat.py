@@ -1,4 +1,5 @@
 import os, sys, argparse, pandas as pd
+from pathos.multiprocessing import ProcessingPool as Pool
 #from sklearn.manifold import TSNE
 from MulticoreTSNE import MulticoreTSNE as TSNE
 import matplotlib.pyplot as plt
@@ -88,6 +89,22 @@ def main():
     #Create empty dismat
     distmat = np.zeros((num_entries, num_entries))
 
+    def calculate_distance(input_row):
+        seq1, seq2, pident = input_row
+        idx1 = name_dict[seq1]
+        idx2 = name_dict[seq2]
+        dist = 1.0 - pident/100.0
+        
+        distmat[idx1][idx2] = dist
+        distmat[idx2][idx1] = dist
+        return
+    
+    p = Pool(t)
+    
+    #Calculate distances and place in distmat
+    p.map(calculate_distance, red_arr)
+    
+    """
     #Put in your distances
     for index, row in red_df.iterrows():
         row = red_df.iloc[index]
@@ -96,7 +113,8 @@ def main():
         dist = 1.0 - row[2]/100.0
         distmat[x][y] = dist
         distmat[y][x] = dist
-
+    """
+    
     #Save distmat as .npy object
     np.save(outdir + '/' + outfile, distmat)
 
@@ -107,7 +125,8 @@ def main():
         pylab.scatter(two_embedding[:,0], two_embedding[:,1])
         pylab.title("2D t-SNE (protein)")
         pylab.show()
-
+    
+    # 305
     os.system('Rscript /home/jacob/scripts/dale.R')
 if __name__ == "__main__":
     main()
