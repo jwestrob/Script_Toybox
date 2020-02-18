@@ -83,6 +83,8 @@ def main():
 
     #Extract X or Y coordinate on resulting distance matrix from hit ID
     name_dict = dict(zip(unique_entries, range(num_entries)))
+    print(red_df.head())
+    sys.exit()
 
     red_df.seq1 = red_df.seq1.apply(lambda x: name_dict[x])
     red_df.seq2 = red_df.seq2.apply(lambda x: name_dict[x])
