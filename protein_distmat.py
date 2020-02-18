@@ -88,9 +88,11 @@ def main():
 
     print("Calculating distances...")
 
+    t1 = time.time()
     red_df.seq1 = red_df.seq1.apply(lambda x: name_dict[x])
     red_df.seq2 = red_df.seq2.apply(lambda x: name_dict[x])
     red_df['dist'] = red_df.pident.apply(lambda x: (1.0 - float(x)) / 100.0)
+    print("Distance calculation took " + str(time.time() - t1) + " seconds.")
 
     #Create empty dismat
     distmat = np.zeros((num_entries, num_entries))
@@ -109,8 +111,9 @@ def main():
 
     p = Pool(t)
 
-    p.map(etch, red_df[['seq1', 'seq2', 'dist']].values)
-
+    t1 = time.time()
+    list(map(etch, red_df[['seq1', 'seq2', 'dist']]))
+    print("Etch took " + str(time.time() - t1) + " seconds.")
 
     """
     #Put in your distances
