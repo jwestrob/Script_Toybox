@@ -74,9 +74,6 @@ def main():
     #Leave out unused columns (we need Query, Hit, %ID)
     red_df = allvall[[0, 1, 2]]
 
-    #Convert to numpy array
-    red_arr = red_df.values
-
     #Extract list of unique IDs from first column (Series)
     unique_entries = red_df[0].unique().tolist()
 
@@ -89,20 +86,32 @@ def main():
     #Create empty dismat
     distmat = np.zeros((num_entries, num_entries))
 
+    print("Calculating distances...")
     def calculate_distance(input_row):
         seq1, seq2, pident = input_row
         idx1 = name_dict[seq1]
         idx2 = name_dict[seq2]
         dist = 1.0 - pident/100.0
         
-        distmat[idx1][idx2] = dist
-        distmat[idx2][idx1] = dist
-        return
+        return [idx1, idx2, dist]
     
     p = Pool(t)
     
     #Calculate distances and place in distmat
-    p.map(calculate_distance, red_arr)
+    distances_and_indices = p.map(calculate_distance, red_df.values)
+
+    print("Distances calculated, writing to distmat...")
+
+    def etch(distlist):
+        idx1 = distlist[0]
+        idx2 = distlist[1]
+        dist = distlist[2]
+        distmat[idx1][idx2] = dist
+        distmat[idx2][idx1] = dist
+        return
+    
+    p.map(etch, distances_and_indices)
+    
     
     """
     #Put in your distances
