@@ -106,7 +106,11 @@ def main():
         idx1 = distlist[0]
         idx2 = distlist[1]
         dist = distlist[2]
-        distmat[idx1, idx2] = dist
+        try:
+            distmat[idx1, idx2] = dist
+        except:
+            print(idx1, idx2, dist)
+            sys.exit()
         distmat[idx2, idx1] = dist
         return
 
