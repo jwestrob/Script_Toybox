@@ -96,10 +96,6 @@ def main():
     distmat = np.zeros((num_entries, num_entries))
 
 
-    p = Pool(t)
-
-    #Calculate distances and place in distmat
-    distances_and_indices = p.map(calculate_distance, red_df.values)
 
     print("Distances calculated, writing to distmat...")
 
@@ -110,6 +106,8 @@ def main():
         distmat[idx1][idx2] = dist
         distmat[idx2][idx1] = dist
         return
+
+    p = Pool(t)
 
     p.map(etch, distances_and_indices)
 
