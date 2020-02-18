@@ -117,7 +117,7 @@ def main():
     p = Pool(t)
 
     t1 = time.time()
-    list(map(etch, red_df[['seq1', 'seq2', 'dist']]))
+    list(map(etch, red_df[['seq1', 'seq2', 'dist']].values))
     print("Etch took " + str(time.time() - t1) + " seconds.")
 
     """
