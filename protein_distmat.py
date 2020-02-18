@@ -73,6 +73,7 @@ def main():
 
     #Leave out unused columns (we need Query, Hit, %ID)
     red_df = allvall[[0, 1, 2]]
+    red_df.columns = ['seq1', 'seq2', 'pident']
 
     #Extract list of unique IDs from first column (Series)
     unique_entries = red_df[0].unique().tolist()
@@ -83,20 +84,22 @@ def main():
     #Extract X or Y coordinate on resulting distance matrix from hit ID
     name_dict = dict(zip(unique_entries, range(num_entries)))
 
+    red_df.seq1 = red_df.seq1.apply(lambda x: name_dict[x])
+    red_df.seq2 = red_df.seq2.apply(lambda x: name_dict[x])
+
     #Create empty dismat
     distmat = np.zeros((num_entries, num_entries))
 
     print("Calculating distances...")
     def calculate_distance(input_row):
         seq1, seq2, pident = input_row
-        idx1 = name_dict[seq1]
-        idx2 = name_dict[seq2]
+
         dist = 1.0 - pident/100.0
-        
-        return [idx1, idx2, dist]
-    
+
+        return [seq1, seq2, dist]
+
     p = Pool(t)
-    
+
     #Calculate distances and place in distmat
     distances_and_indices = p.map(calculate_distance, red_df.values)
 
@@ -109,10 +112,10 @@ def main():
         distmat[idx1][idx2] = dist
         distmat[idx2][idx1] = dist
         return
-    
+
     p.map(etch, distances_and_indices)
-    
-    
+
+
     """
     #Put in your distances
     for index, row in red_df.iterrows():
@@ -123,7 +126,7 @@ def main():
         distmat[x][y] = dist
         distmat[y][x] = dist
     """
-    
+
     #Save distmat as .npy object
     np.save(outdir + '/' + outfile, distmat)
 
@@ -136,7 +139,7 @@ def main():
         pylab.title("2D t-SNE (protein)")
         #pylab.show()
         plt.savefig(outdir + '/tsne_embedding.png')
-    
+
     # 305
     os.system('Rscript /home/jacob/scripts/dale.R')
 if __name__ == "__main__":
