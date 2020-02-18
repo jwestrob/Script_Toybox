@@ -46,8 +46,10 @@ def main():
 
         #Move to directory for output
         os.chdir(outdir)
-        #Make symbolic link to outfile
-        os.system('ln -s ' + infile_path + ' .')
+
+        if not os.path.exists(os.path.join(outdir, infile)):
+            #Make symbolic link to outfile
+            os.system('ln -s ' + infile_path + ' .')
     else:
         outdir = os.getcwd()
     if not blasted:
@@ -76,7 +78,7 @@ def main():
     red_df.columns = ['seq1', 'seq2', 'pident']
 
     #Extract list of unique IDs from first column (Series)
-    unique_entries = red_df[0].unique().tolist()
+    unique_entries = red_df['seq1'].unique().tolist()
 
     #Get number of total unique IDs
     num_entries = len(unique_entries)
