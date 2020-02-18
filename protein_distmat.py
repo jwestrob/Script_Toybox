@@ -1,4 +1,5 @@
 import os, sys, argparse, pandas as pd
+import time
 from pathos.multiprocessing import ProcessingPool as Pool
 #from sklearn.manifold import TSNE
 from MulticoreTSNE import MulticoreTSNE as TSNE
