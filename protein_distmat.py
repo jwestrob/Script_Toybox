@@ -90,9 +90,9 @@ def main():
     print("Calculating distances...")
 
     t1 = time.time()
-    red_df.seq1 = red_df.seq1.apply(lambda x: name_dict[x])
-    red_df.seq2 = red_df.seq2.apply(lambda x: name_dict[x])
-    red_df['dist'] = red_df.pident.apply(lambda x: (1.0 - float(x)) / 100.0)
+    red_df.seq1 = red_df.seq1.apply(lambda x: int(name_dict[x]))
+    red_df.seq2 = red_df.seq2.apply(lambda x: int(name_dict[x]))
+    red_df['dist'] = red_df.pident.apply(lambda x: (1.0 - (float(x) / 100.0))
     print("Distance calculation took " + str(time.time() - t1) + " seconds.")
 
     #Create empty dismat
@@ -103,8 +103,8 @@ def main():
     print("Distances calculated, writing to distmat...")
 
     def etch(distlist):
-        idx1 = distlist[0]
-        idx2 = distlist[1]
+        idx1 = int(distlist[0])
+        idx2 = int(distlist[1])
         dist = distlist[2]
         try:
             distmat[idx1, idx2] = dist
@@ -117,7 +117,7 @@ def main():
     p = Pool(t)
 
     t1 = time.time()
-    list(map(etch, red_df[['seq1', 'seq2', 'dist']].values))
+    list(map(etch, red_df[['seq1', 'seq2', 'dist']].values  ))
     print("Etch took " + str(time.time() - t1) + " seconds.")
 
     """
