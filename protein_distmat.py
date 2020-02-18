@@ -92,7 +92,7 @@ def main():
     t1 = time.time()
     red_df.seq1 = red_df.seq1.apply(lambda x: int(name_dict[x]))
     red_df.seq2 = red_df.seq2.apply(lambda x: int(name_dict[x]))
-    red_df['dist'] = red_df.pident.apply(lambda x: (1.0 - (float(x) / 100.0))
+    red_df['dist'] = red_df.pident.apply(lambda x: 1.0 - (float(x) / 100.0))
     print("Distance calculation took " + str(time.time() - t1) + " seconds.")
 
     #Create empty dismat
