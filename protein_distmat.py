@@ -109,7 +109,7 @@ def main():
 
     p = Pool(t)
 
-    p.map(etch, distances_and_indices)
+    p.map(etch, red_df[['seq1', 'seq2', 'dist']].values)
 
 
     """
