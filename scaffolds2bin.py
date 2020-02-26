@@ -9,7 +9,7 @@ import argparse
 
 t1 = time.time()
 
-parser=argparse.ArgumentParser(description='Takes a series of binning files (fasta format) and reads (fasta format), creates a tab-separated scaffolds2bin file for input to DAStool.')
+parser=argparse.ArgumentParser(description='Takes a series of bin files (fasta format) and contigs (fasta format), creates a tab-separated scaffolds2bin file for input to DAStool.')
 
 parser.add_argument('-fbd', metavar='bindir', nargs='?', default=None, help="Path to directory containing binning files (FASTA FORMAT ONLY)")
 parser.add_argument('-sbd', metavar='bindir', nargs='?', default=None, help="Path to directory containing binning files (SCAFFOLDS2BIN FORMAT ONLY)")
