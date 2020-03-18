@@ -73,10 +73,10 @@ def main():
         binfile_list = []
         #Get a list of binfiles (as pandas dfs) with corresponding filename
         for filename in os.listdir(sbindir):
-            if filename.split('_')[-1] == 'scaffolds2bin.txt':
+            try:
                 binfile_list.append([pd.read_csv(sbindir + '/' + filename, sep='\t', names=["Contig", "Bin"]), filename])
-            #else:
-                #print("Found some nonsense. Please evaluate: ", filename)
+            except:
+                print("Found some nonsense. Please evaluate: ", filename)
 
         for binfile in binfile_list:
             binfile_df = binfile[0]
