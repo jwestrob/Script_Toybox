@@ -6,6 +6,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import pandas as pd
 import argparse
+from pathos.multiprocessing import ProcessingPool as Pool
 
 
 
