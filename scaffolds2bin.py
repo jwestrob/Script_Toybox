@@ -43,6 +43,29 @@ if args.t is not None:
 else:
     threads = 1
 
+def fetch_recs_for_bin(df_and_name):
+    binfile_df = df_and_name[0]
+    binfile_name = df_and_name[1]
+
+    #Parse the right contigs file
+
+    print("Werkin on : ", binfile_name)
+    unique_bins = binfile_df.bin.unique()
+    for index, bin in enumerate(unique_bins):
+        #Get a reduced dataframe with only the rows corresponding to the bin in question
+        bin_red_df = binfile_df[binfile_df["bin"] == bin]
+        bin_scaffolds = bin_red_df.scaffold_name.unique().tolist()
+        bin_records = list(filter(lambda x: x.id in bin_scaffolds, SeqIO.parse(contig_file, 'fasta')))
+
+        if len(bin_records) == 0:
+            print(binfile_name, bin)
+            print(len(bin_red_df))
+            print(bin_red_df.head())
+            sys.exit()
+        SeqIO.write(bin_records, outdir + '/' + binfile_name + '-' + bin + '.fasta', 'fasta')
+        print('Wrote ' + binfile_name + ' bin ' + str(index) + ' to ' + binfile_name + '-' + bin + '.fasta')
+    return
+
 def main():
     if reverse == False:
         #Declare empty list for SeqRecord objects
@@ -90,28 +113,7 @@ def main():
 
 
 
-def fetch_recs_for_bin(df_and_name):
-    binfile_df = df_and_name[0]
-    binfile_name = df_and_name[1]
 
-    #Parse the right contigs file
-
-    print("Werkin on : ", binfile_name)
-    unique_bins = binfile_df.bin.unique()
-    for index, bin in enumerate(unique_bins):
-        #Get a reduced dataframe with only the rows corresponding to the bin in question
-        bin_red_df = binfile_df[binfile_df["bin"] == bin]
-        bin_scaffolds = bin_red_df.scaffold_name.unique().tolist()
-        bin_records = list(filter(lambda x: x.id in bin_scaffolds, SeqIO.parse(contig_file, 'fasta')))
-
-        if len(bin_records) == 0:
-            print(binfile_name, bin)
-            print(len(bin_red_df))
-            print(bin_red_df.head())
-            sys.exit()
-        SeqIO.write(bin_records, outdir + '/' + binfile_name + '-' + bin + '.fasta', 'fasta')
-        print('Wrote ' + binfile_name + ' bin ' + str(index) + ' to ' + binfile_name + '-' + bin + '.fasta')
-    return
 
 
 
