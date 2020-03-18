@@ -85,7 +85,7 @@ def main():
             #Parse the right contigs file
             contigs = list(SeqIO.parse(contig_file, 'fasta'))
             print("Werkin on : ", binfile_name)
-            unique_bins = binfile_df.Bin.unique()
+            unique_bins = binfile_df.bin.unique()
             for index, bin in enumerate(unique_bins):
                 #Get a reduced dataframe with only the rows corresponding to the bin in question
                 bin_red_df = binfile_df[binfile_df["bin"] == bin]
