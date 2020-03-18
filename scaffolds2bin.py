@@ -102,7 +102,7 @@ def fetch_recs_for_bin(df_and_name):
         #Get a reduced dataframe with only the rows corresponding to the bin in question
         bin_red_df = binfile_df[binfile_df["bin"] == bin]
         bin_scaffolds = bin_red_df.scaffold_name.unique().tolist()
-        bin_records = list(filter(lamdba x: x.id in bin_scaffolds, SeqIO.parse(contig_file, 'fasta')))
+        bin_records = list(filter(lambda x: x.id in bin_scaffolds, SeqIO.parse(contig_file, 'fasta')))
 
         if len(bin_records) == 0:
             print(binfile_name, bin)
