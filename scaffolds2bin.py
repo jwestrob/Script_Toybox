@@ -74,7 +74,7 @@ def main():
         #Get a list of binfiles (as pandas dfs) with corresponding filename
         for filename in os.listdir(sbindir):
             try:
-                binfile_list.append([pd.read_csv(sbindir + '/' + filename, sep='\t', filename])
+                binfile_list.append([pd.read_csv(sbindir + '/' + filename, sep='\t', filename)])
             except:
                 print("Found some nonsense. Please evaluate: ", filename)
 
