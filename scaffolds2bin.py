@@ -74,7 +74,7 @@ def main():
         #Get a list of binfiles (as pandas dfs) with corresponding filename
         for filename in os.listdir(sbindir):
             try:
-                binfile_list.append([pd.read_csv(sbindir + '/' + filename, sep='\t', names=["Contig", "Bin"]), filename])
+                binfile_list.append([pd.read_csv(sbindir + '/' + filename, sep='\t', filename])
             except:
                 print("Found some nonsense. Please evaluate: ", filename)
 
@@ -88,11 +88,11 @@ def main():
             unique_bins = binfile_df.Bin.unique()
             for index, bin in enumerate(unique_bins):
                 #Get a reduced dataframe with only the rows corresponding to the bin in question
-                bin_red_df = binfile_df[binfile_df["Bin"] == bin]
+                bin_red_df = binfile_df[binfile_df["bin"] == bin]
                 #Make an empty list to store SeqRecord objects to put in a FASTA
                 bin_records = []
                 for record in contigs:
-                    if record.id in list(bin_red_df["Contig"]):
+                    if record.id in list(bin_red_df["scaffold_name"]):
                         bin_records.append(record)
                 if len(bin_records) == 0:
                     print(binfile_name, bin)
