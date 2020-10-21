@@ -76,14 +76,14 @@ filt_path <- file.path(fastqpath, "filtered") # Place filtered files in filtered
 filtFs <- file.path(filt_path, paste0(sample.names, "_F_filt.fastq.gz"))
 filtRs <- file.path(filt_path, paste0(sample.names, "_R_filt.fastq.gz"))
 
-out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(240,160),
-              maxN=0, maxEE=c(2,5), truncQ=2, rm.phix=TRUE,
-              compress=TRUE, multithread=TRUE) # On Windows set multithread=FALSE
+out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs,
+              maxN=0, maxEE=c(5,5), truncQ=2, rm.phix=TRUE,
+              compress=TRUE, multithread=15) # On Windows set multithread=FALSE
 
 #Perform error rate estimation
 
-errF <- learnErrors(filtFs, multithread=TRUE)
-errR <- learnErrors(filtRs, multithread=TRUE)
+errF <- learnErrors(filtFs, multithread=15)
+errR <- learnErrors(filtRs, multithread=15)
 
 print(plotErrors(errF, nominalQ=TRUE) + ggtitle('Error rates - Forward reads'))
 print(plotErrors(errR, nominalQ=TRUE) + ggtitle('Error rates - Reverse reads'))
@@ -94,8 +94,8 @@ derepRs <- derepFastq(filtRs, verbose=TRUE)
 names(derepFs) <- sample.names
 names(derepRs) <- sample.names
 
-dadaFs <- dada(derepFs, err=errF, multithread=TRUE)
-dadaRs <- dada(derepRs, err=errR, multithread=TRUE)
+dadaFs <- dada(derepFs, err=errF, multithread=15)
+dadaRs <- dada(derepRs, err=errR, multithread=15)
 
 mergers <- mergePairs(dadaFs, derepFs, dadaRs, derepRs, verbose=TRUE)
 
@@ -111,7 +111,7 @@ track <- cbind(out, sapply(dadaFs, getN), sapply(mergers, getN), rowSums(seqtab)
 colnames(track) <- c("input", "filtered", "denoised", "merged", "tabled", "nonchim")
 rownames(track) <- sample.names
 
-taxa <- assignTaxonomy(seqtab.nochim, silva_train, multithread=TRUE)
+taxa <- assignTaxonomy(seqtab.nochim, silva_train, multithread=15)
 taxa <- addSpecies(taxa, silva_species)
 
 samples.out <- rownames(seqtab.nochim)

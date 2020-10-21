@@ -16,19 +16,22 @@ for line in f.readlines():
         files.append([])
     if line.startswith('NAME'):
         try:
-            names.append(line.rstrip('\n').split('  ')[1])
+            names.append(line.rstrip('\n').split('\t')[1])
         except:
-            print(line.rstrip('\n').split('  '))
+            try:
+                names.append(line.rstrip('\n').split('  ')[1])
+            except:
+                print(line.rstrip('\n').split('\t'))
     files[-1].append(line)
 
 for index, file in enumerate(files):
     name = names[index]
-    if 'rhodopsin' not in name.lower():
-        continue
+    #if 'rhodopsin' not in name.lower():
+    #    continue
     filename = name + '.hmm'
     with open(filename, 'w') as handle:
         list(map(lambda x: handle.write(x), file))
 
 
 
-os.system('Rscript ~/scripts/dale.R')
+#os.system('Rscript ~/scripts/dale.R')

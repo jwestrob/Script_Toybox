@@ -6,13 +6,10 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import pandas as pd
 import argparse
-from pathos.multiprocessing import ProcessingPool as Pool
-
-
 
 t1 = time.time()
 
-parser=argparse.ArgumentParser(description='Takes a series of bin files (fasta format) and contigs (fasta format), creates a tab-separated scaffolds2bin file for input to DAStool.')
+parser=argparse.ArgumentParser(description='Takes a series of binning files (fasta format) and reads (fasta format), creates a tab-separated scaffolds2bin file for input to DAStool.')
 
 parser.add_argument('-fbd', metavar='bindir', nargs='?', default=None, help="Path to directory containing binning files (FASTA FORMAT ONLY)")
 parser.add_argument('-sbd', metavar='bindir', nargs='?', default=None, help="Path to directory containing binning files (SCAFFOLDS2BIN FORMAT ONLY)")
@@ -21,7 +18,6 @@ parser.add_argument('-cd', metavar='contigs_dir', nargs='?', default=None, help=
 parser.add_argument('-r', action='store_true', default=False, help="Wanna turn a .scaffolds2bin file into a .fasta bin file?")
 parser.add_argument('-o', metavar='outfile', nargs='?', default=None, help="S2B ONLY: Name of outfile (.scaffolds2bin.tsv will be appended to whatever you put here)")
 parser.add_argument('-outdir', nargs='?', default='.', help="B2S only: Name of directory to throw your output FASTAs into.")
-parser.add_argument('-t', default=1, nargs='?', help='Number of threads to use.')
 
 args = parser.parse_args()
 
@@ -39,33 +35,6 @@ if args.o is not None:
 if args.outdir != '.':
     outdir = str(args.outdir).split('/')[0]
 reverse = args.r
-if args.t is not None:
-    threads = int(args.t)
-else:
-    threads = 1
-
-def fetch_recs_for_bin(df_and_name):
-    binfile_df = df_and_name[0]
-    binfile_name = df_and_name[1]
-
-    #Parse the right contigs file
-
-    print("Werkin on : ", binfile_name)
-    unique_bins = binfile_df.bin.unique()
-    for index, bin in enumerate(unique_bins):
-        #Get a reduced dataframe with only the rows corresponding to the bin in question
-        bin_red_df = binfile_df[binfile_df["bin"] == bin]
-        bin_scaffolds = bin_red_df.scaffold_name.unique().tolist()
-        bin_records = list(filter(lambda x: x.id in bin_scaffolds, SeqIO.parse(contig_file, 'fasta')))
-
-        if len(bin_records) == 0:
-            print(binfile_name, bin)
-            print(len(bin_red_df))
-            print(bin_red_df.head())
-            sys.exit()
-        SeqIO.write(bin_records, outdir + '/' + binfile_name + '-' + bin + '.fasta', 'fasta')
-        print('Wrote ' + binfile_name + ' bin ' + str(index) + ' to ' + binfile_name + '-' + bin + '.fasta')
-    return
 
 def main():
     if reverse == False:
@@ -104,13 +73,34 @@ def main():
         binfile_list = []
         #Get a list of binfiles (as pandas dfs) with corresponding filename
         for filename in os.listdir(sbindir):
-            try:
-                binfile_list.append([pd.read_csv(sbindir + '/' + filename, sep='\t'), filename])
-            except:
-                print("Found some nonsense. Please evaluate: ", filename)
+            if filename.split('_')[-1] == 'scaffolds2bin.txt':
+                binfile_list.append([pd.read_csv(sbindir + '/' + filename, sep='\t', names=["Contig", "Bin"]), filename])
+            #else:
+                #print("Found some nonsense. Please evaluate: ", filename)
 
-        p = Pool(threads)
-        dummy_list = p.map(fetch_recs_for_bin, binfile_list)
+        for binfile in binfile_list:
+            binfile_df = binfile[0]
+            binfile_name = binfile[1]
+
+            #Parse the right contigs file
+            contigs = list(SeqIO.parse(contig_file, 'fasta'))
+            print("Werkin on : ", binfile_name)
+            unique_bins = binfile_df.Bin.unique()
+            for index, bin in enumerate(unique_bins):
+                #Get a reduced dataframe with only the rows corresponding to the bin in question
+                bin_red_df = binfile_df[binfile_df["Bin"] == bin]
+                #Make an empty list to store SeqRecord objects to put in a FASTA
+                bin_records = []
+                for record in contigs:
+                    if record.id in list(bin_red_df["Contig"]):
+                        bin_records.append(record)
+                if len(bin_records) == 0:
+                    print(binfile_name, bin)
+                    print(len(bin_red_df))
+                    print(bin_red_df.head())
+                    sys.exit()
+                SeqIO.write(bin_records, outdir + '/' + binfile_name + '-' + bin + '.fasta', 'fasta')
+                print('Wrote ' + binfile_name + ' bin ' + str(index) + ' to ' + binfile_name + '-' + bin + '.fasta')
 
 
 
