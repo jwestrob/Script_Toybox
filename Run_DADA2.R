@@ -64,8 +64,8 @@ if(otu){
 ########################################
 
 # Forward and reverse fastq filenames have format: SAMPLENAME_R1_001.fastq and SAMPLENAME_R2_001.fastq
-fnFs <- sort(list.files(fastqpath, pattern="_R1_001.fastq", full.names = TRUE))
-fnRs <- sort(list.files(fastqpath, pattern="_R2_001.fastq", full.names = TRUE))
+fnFs <- sort(list.files(fastqpath, pattern="PE.1.fastq.gz", full.names = TRUE))
+fnRs <- sort(list.files(fastqpath, pattern="PE.2.fastq.gz", full.names = TRUE))
 # Extract sample names, assuming filenames have format: SAMPLENAME_XXX.fastq
 sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
 pdf(pdfout)
@@ -101,7 +101,7 @@ mergers <- mergePairs(dadaFs, derepFs, dadaRs, derepRs, verbose=TRUE)
 
 seqtab <- makeSequenceTable(mergers)
 
-print("Sequence length distribution: ", table(nchar(getSequences(seqtab))))
+#print("Sequence length distribution: ", table(nchar(getSequences(seqtab))))
 
 seqtab.nochim <- removeBimeraDenovo(seqtab, method="consensus", multithread=TRUE, verbose=TRUE)
 
