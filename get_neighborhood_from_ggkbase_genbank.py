@@ -64,7 +64,6 @@ if len(recs) > 1:
     except:
 
         ids  = [rec.id for rec in recs]
-
         #check for NCBI format bullshit
         if ids[0].endswith('.1'):
             scaffold_rec = list(filter(lambda x: x.id == scaffold_id + '.1', recs))[0]
@@ -72,7 +71,8 @@ if len(recs) > 1:
             print("Scaffold not found; please check the format of your inputs to ensure that they match.")
             sys.exit()
 
-
+else:
+    scaffold_rec = recs[0]
 
 output_filename = sys.argv[4]
 
@@ -104,7 +104,12 @@ desired_orfnum = int(desired_orfname.split('_')[-1])
 def in_neighborhood_filter(feature, desired_orfnum, neighborhood_size):
     if feature.type == 'gene' or feature.type == 'tRNA':
         return False
-    feature_orfname = feature.qualifiers['locus_tag'][0]
+    try:
+        feature_orfname = feature.qualifiers['locus_tag'][0]
+    except:
+        #Then it's a 16S
+        #print(feature.qualifiers)
+        return False
 
     try:
         feature_orfnum = int(''.join(feature_orfname.split('_')[-1].split()))
@@ -127,9 +132,8 @@ try:
 	total_start = in_neighborhood_features[0].location.start
 except:
 	print("Num features:")
-	print(len(features))
-	print([x.qualifiers['locus_tag'] for x in features])
-	sys.exit()
+	print(len(in_neighborhood_features))
+
 total_end = in_neighborhood_features[-1].location.end
 
 #Declare new SeqRecord; subset the nucleotide sequence for visualization in clinker
