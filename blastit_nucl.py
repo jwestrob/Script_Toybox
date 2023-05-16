@@ -22,7 +22,7 @@ print(db_name, query, output, threads, pident)
 
 
 
-os.system('blastn -perc_identity ' + str(pident) + ' -outfmt "6 qseqid sseqid pident qlen length mismatch gapopen qstart qend sstart send sseq evalue bitscore" -db ' + db_name + ' -num_threads ' + threads + \
+os.system('blastn -perc_identity ' + str(pident) + ' -word_size 7 -outfmt "6 qseqid sseqid pident qlen length mismatch gapopen qstart qend sstart send sseq evalue bitscore" -db ' + db_name + ' -num_threads ' + threads + \
 		' -query ' + query + ' -out ' + output)
 
 header = ['qseqid', 'sseqid', 'pident', 'qlen', 'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart', 'send', 'sseq', 'evalue', 'bitscore']

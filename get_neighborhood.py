@@ -84,6 +84,7 @@ neighborhood_rec.features = in_neighborhood_features
 
 
 new_recs = []
+#lol why did i write it this way? w/e it works
 for nrec in [neighborhood_rec]:
 	new_rec = nrec
 	new_features = []

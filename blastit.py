@@ -21,10 +21,10 @@ threads = args.threads
 
 
 
-os.system('blastp -outfmt "6 sseqid qseqid pident qlen length mismatch gapopen qstart qend sstart send sseq evalue bitscore" -db ' + db_name + ' -num_threads ' + threads + \
+os.system('blastp -outfmt "6 sseqid qseqid pident qlen slen length mismatch gapopen qstart qend sstart send sseq evalue bitscore" -db ' + db_name + ' -num_threads ' + threads + \
 		' -query ' + query + ' -out ' + output)
 
-header = ['qseqid', 'sseqid', 'pident', 'qlen', 'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart', 'send', 'sseq', 'evalue', 'bitscore']
+header = ['sseqid', 'qseqid', 'pident', 'qlen', 'slen', 'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart', 'send', 'sseq', 'evalue', 'bitscore']
 
 hits = pd.read_csv(output, sep='\t', names=header)
 
