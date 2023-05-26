@@ -1,5 +1,4 @@
 import os, sys
-from Bio.Alphabet import generic_dna, generic_protein
 from Bio import SeqIO, SeqFeature
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
@@ -77,7 +76,7 @@ total_end = in_neighborhood_features[-1].location.end
 
 #Declare new SeqRecord; subset the nucleotide sequence for visualization in clinker
 neighborhood_rec = SeqRecord(
-                    Seq(str(recs[0].seq[total_start:total_end]), alphabet=generic_dna)
+                    Seq(str(recs[0].seq[total_start:total_end]))
                     )
 neighborhood_rec.features = in_neighborhood_features
 
