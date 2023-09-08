@@ -11,7 +11,7 @@ t1 = time.time()
 parser=argparse.ArgumentParser(description='Takes a series of binning files (fasta format) and scaffolds (fasta format), creates a tab-separated scaffolds2bin file for input to DAStool.')
 
 parser.add_argument('-fbd', metavar='bindir', nargs='?', default=None, help="Path to directory containing binning files (FASTA FORMAT ONLY)")
-parser.add_argument('-sbd', metavar='bindir', nargs='?', default=None, help="Path to directory containing binning files (SCAFFOLDS2BIN FORMAT ONLY)")
+parser.add_argument('-sbd', metavar='s2bfile', nargs='?', default=None, help="Path to a single binning file (SCAFFOLDS2BIN FORMAT ONLY)")
 parser.add_argument('-c', metavar='contigs', nargs='?', default=None, help="Contig file (FASTA FORMAT ONLY)")
 parser.add_argument('-cd', metavar='contigs_dir', nargs='?', default=None, help="Contig file directory (ALSO ONLY FASTA FORMAT PLS)")
 parser.add_argument('-r', action='store_true', default=False, help="Wanna turn a .scaffolds2bin file into a .fasta bin file?")
@@ -25,7 +25,7 @@ args = parser.parse_args()
 if args.fbd is not None:
     fbindir = str(args.fbd)
 if args.sbd is not None:
-    sbindir = str(args.sbd)
+    sbinfile = str(args.sbd)
 if args.c is not None:
     contig_file = str(args.c)
 if args.cd is not None:
@@ -104,19 +104,15 @@ def main():
 
     elif reverse:
         binfile_list = []
-        #Get a list of binfiles (as pandas dfs) with corresponding filename
-        for filename in filter(lambda x: x.endswith('scaffolds2bin.txt'),os.listdir(sbindir)):
+        # Read the single binfile as a pandas df
+        binfile_df = pd.read_csv(sbinfile, sep='\t', header=None)
+        if len(binfile_df.columns) > 2:
+            binfile_df = binfile_df[binfile_df.columns[0:2]]
+            binfile_df.columns = ["Contig", "Bin"]
+        else:
+            binfile_df.columns = ["Contig", "Bin"]
+        binfile_list.append([binfile_df, sbinfile])
 
-            binfile_df = pd.read_csv(sbindir + '/' + filename, sep='\t', header=None)
-            if len(binfile_df.columns) > 2:
-                binfile_df = binfile_df[binfile_df.columns[0:2]]
-                binfile_df.columns = ["Contig", "Bin"]
-            else:
-                binfile_df.columns = ["Contig", "Bin"]
-            binfile_list.append([binfile_df, filename])
-
-            #else:
-                #print("Found some nonsense. Please evaluate: ", filename)
         if not os.path.exists(outdir):
             os.system('mkdir ' + outdir)
         for binfile in binfile_list:
@@ -135,7 +131,7 @@ def main():
                 bins_to_contig_lists[bin] = bin_contigs
 
             extract_hits(bins_to_contig_lists, outdir, contig_file, threads)
-        
+            
 
 
 

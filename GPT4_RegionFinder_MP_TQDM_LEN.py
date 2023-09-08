@@ -45,7 +45,7 @@ if os.path.isdir(input_path):
     except FileNotFoundError:
         logging.error(f'Could not find the directory: {input_path}')
         raise
-elif os.path.isfile(input_path) and (input_path.endswith('.faa') or input_path.endswith('.fasta')):
+elif os.path.isfile(input_path) and input_path.endswith('.faa'):
     input_files = [input_path]
 else:
     logging.error(f'Invalid input: {input_path}. Please provide a valid FASTA file or directory containing FASTA files.')

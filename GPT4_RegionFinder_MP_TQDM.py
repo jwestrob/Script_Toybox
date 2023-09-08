@@ -18,7 +18,6 @@ parser.add_argument('--input', type=str, required=True, help='Input protein FAST
 parser.add_argument('--output_filename', type=str, required=True, help='Output file name.')
 parser.add_argument('--hmm_file', type=str, required=True, help='Path to HMM file or directory.')
 parser.add_argument('--threads', type=int, default=1, help='Number of threads to be used.')
-parser.add_argument('--len_label', action='store_true', help='Append the length of the original ORF to the FASTA headers.')
 args = parser.parse_args()
 
 # File paths
@@ -45,7 +44,7 @@ if os.path.isdir(input_path):
     except FileNotFoundError:
         logging.error(f'Could not find the directory: {input_path}')
         raise
-elif os.path.isfile(input_path) and (input_path.endswith('.faa') or input_path.endswith('.fasta')):
+elif os.path.isfile(input_path) and input_path.endswith('.faa'):
     input_files = [input_path]
 else:
     logging.error(f'Invalid input: {input_path}. Please provide a valid FASTA file or directory containing FASTA files.')
@@ -90,10 +89,7 @@ def process_task(task):
         if record.id in hit_regions:
             for start, end in hit_regions[record.id]:
                 hit_seq = record.seq[start:end]
-                if args.len_label:
-                    new_record = SeqRecord(hit_seq, id=record.id + "_" + str(start) + "_" + str(end) + "__len" + str(len(record.seq)), description="")
-                else:
-                    new_record = SeqRecord(hit_seq, id=record.id + "_" + str(start) + "_" + str(end), description="")
+                new_record = SeqRecord(hit_seq, id=record.id + "_" + str(start) + "_" + str(end), description="")
                 filtered_records.append(new_record)
 
     # Remove the HMMsearch output file
