@@ -18,9 +18,13 @@ def build_download_cmd(row, outdir):
 
 
 
-def make_p3_cmd(level, taxon):
-    return ['p3-all-genomes', '--eq', ','.join((level, taxon)), '--attr', 'genome_name']
-
+def make_p3_cmd(filters):
+    cmd = ['p3-all-genomes', '--attr', 'genome_name']
+    for filter in filters:
+        field, value = filter.split(',')
+        cmd.extend(['--eq', ','.join((field.strip(), value.strip()))])
+    return cmd
+    
 def run_cmd(cmd, output_path=None, max_retries=3):
     for _ in range(max_retries):
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -44,41 +48,38 @@ def run_cmd(cmd, output_path=None, max_retries=3):
 
 
 def main():
-	level = args.level
-	taxon = args.taxon
-	threads = args.threads
-	outdir = args.outdir
+    filters = args.filter
+    threads = args.threads
+    outdir = args.outdir
 
-	os.makedirs(outdir, exist_ok=True)
+    os.makedirs(outdir, exist_ok=True)
 
-	#generate command to obtain BVBRC IDs
-	p3_cmd = make_p3_cmd(level, taxon)
+    # Generate command to obtain BVBRC IDs with filters
+    p3_cmd = make_p3_cmd(filters)
 
-	#Execute command to download info
-	stdout, _ = run_cmd(p3_cmd)
+    # Execute command to download info
+    stdout, _ = run_cmd(p3_cmd)
 
-	dtypes = {'genome.genome_name': str, 'genome.genome_id': str}
+    dtypes = {'genome.genome_name': str, 'genome.genome_id': str}
+    data = io.StringIO(stdout.decode())
+    names = pd.read_csv(data, sep='\t', dtype=dtypes)
 
-	data = io.StringIO(stdout.decode())
-	names = pd.read_csv(data, sep='\t', dtype=dtypes)
+    # Replace spaces with underscores in genome names
+    names['genome.genome_name'] = names['genome.genome_name'].apply(lambda x: '_'.join(x.split(' ')))
 
-	#Replace spaces with underscores
-	names['genome.genome_name'] = names['genome.genome_name'].apply(lambda x: '_'.join(x.split(' ')))
+    # Generate download commands and output paths
+    download_cmds_and_paths = names.apply(build_download_cmd, outdir=outdir, axis=1)
 
-	# Generate download commands and output paths
-	download_cmds_and_paths = names.apply(build_download_cmd, outdir=outdir, axis=1)
-
-	# GPT4 multithreaded version
-	with ThreadPoolExecutor(max_workers=threads) as executor:
-	    futures = {executor.submit(run_cmd, cmd, output_path) for cmd, output_path in download_cmds_and_paths}
-	    for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
-	        pass
+    # Multithreaded download
+    with ThreadPoolExecutor(max_workers=threads) as executor:
+        futures = {executor.submit(run_cmd, cmd, output_path) for cmd, output_path in download_cmds_and_paths}
+        for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
+            pass
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Download genomes from BV-BRC database.')
-    parser.add_argument('--level', required=True, help='The taxonomic rank (e.g. phylum, species) in the BV-BRC database.')
-    parser.add_argument('--taxon', required=True, help='The taxonomic name in the BV-BRC database.')
+    parser.add_argument('--filter', nargs='+', required=True, help='Filter criteria in the form field_name,value. Example: --filter host_common_name,Human genome_status,Complete')
     parser.add_argument('--threads', type=int, default=1, help='The number of threads to be used in multithreading.')
     parser.add_argument('--outdir', required=True, help='The directory where results will be stored.')
 
