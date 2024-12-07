@@ -1,0 +1,27 @@
+Command: p3-genome-fasta --protein 3031139.4
+Output path: ../Deltacoronavirus_protein/black-headed_gull_deltacoronavirus_BHGdCoV__Poland__P103__2018.faa
+
+Command: p3-genome-fasta --protein 3031139.5
+Output path: ../Deltacoronavirus_protein/black-headed_gull_deltacoronavirus_BHGdCoV__Poland__P350__2017.faa
+
+Command: p3-genome-fasta --protein 3031140.3
+Output path: ../Deltacoronavirus_protein/common_gull_deltacoronavirus_CGdCoV__Poland__P005__2019.faa
+
+Command: p3-genome-fasta --protein 3031139.3
+Output path: ../Deltacoronavirus_protein/black-headed_gull_deltacoronavirus_BHGdCoV__Poland__P052__2018.faa
+
+Command: p3-genome-fasta --protein 1586324.1096
+Output path: ../Deltacoronavirus_protein/Porcine_deltacoronavirus_CHN-HA-2017.faa
+
+Command: p3-genome-fasta --protein 1586324.1102
+Output path: ../Deltacoronavirus_protein/Porcine_deltacoronavirus_CHN-JS-2018.faa
+
+Command: p3-genome-fasta --protein 1586324.1101
+Output path: ../Deltacoronavirus_protein/Porcine_deltacoronavirus_PDCoV-GX2022-1.faa
+
+Command: p3-genome-fasta --protein 2794340.3
+Output path: ../Deltacoronavirus_protein/Montifringilla_taczanowskii_coronavirus_N.faa
+
+Command: p3-genome-fasta --protein 2794341.3
+Output path: ../Deltacoronavirus_protein/Montifringilla_taczanowskii_coronavirus_HM.faa
+
